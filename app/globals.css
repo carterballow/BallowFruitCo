@@ -1,26 +1,56 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* ─── Design Tokens ─────────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Brand palette */
+  --color-orange:       #F97316;
+  --color-orange-dark:  #EA580C;
+  --color-orange-pale:  #FFF7ED;
+  --color-yellow:       #F59E0B;
+  --color-red:          #DC2626;
+
+  /* Light surfaces */
+  --color-cream:        #FFFBF5;
+  --color-surface:      #FFFFFF;
+  --color-surface-2:    #FDF8F2;
+  --color-border:       #F0E8DC;
+  --color-border-dark:  #E0D4C4;
+
+  /* Text */
+  --color-text:         #1C1917;
+  --color-muted:        #78716C;
+  --color-muted-light:  #A8A29E;
+
+  /* Fonts */
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ─── Base ───────────────────────────────────────────────── */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #FFFBF5;
+  color: #1C1917;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* ─── Card shadows ───────────────────────────────────────── */
+.card-shadow {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+}
+.card-shadow-hover:hover {
+  box-shadow: 0 4px 24px rgba(249,115,22,0.14), 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* ─── Scroll Reveal ──────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+html {
+  scroll-behavior: smooth;
 }
