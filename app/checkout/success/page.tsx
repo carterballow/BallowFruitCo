@@ -79,6 +79,33 @@ export default async function SuccessPage({ searchParams }: Props) {
         })),
         status: "paid",
       });
+
+      // Decrement inventory for each fruit ordered.
+      // Map Stripe line item descriptions back to fruit IDs.
+      // Description format is the product name e.g. "Naval Oranges"
+      const nameToFruitId: Record<string, string> = {
+        "Naval Oranges": "naval-oranges",
+        "Blood Oranges": "blood-oranges",
+        "Lemons": "lemons",
+        "Limes": "limes",
+        "Pomegranates": "pomegranates",
+        "Avocados": "avocados",
+      };
+      const inventoryItems = lineItems
+        .map((item) => ({
+          fruit_id: nameToFruitId[item.description ?? ""] ?? null,
+          quantity: item.quantity ?? 1,
+        }))
+        .filter((i) => i.fruit_id !== null) as { fruit_id: string; quantity: number }[];
+
+      if (inventoryItems.length > 0) {
+        const baseUrl = process.env.NEXT_PUBLIC_URL ?? "http://localhost:3000";
+        await fetch(`${baseUrl}/api/inventory`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ items: inventoryItems }),
+        }).catch(() => {});  // non-blocking — inventory failure shouldn't break success page
+      }
     }
   } catch (err) {
     // Database error — log it but don't crash the page

@@ -9,7 +9,7 @@ const highlights = [
   },
   {
     title: "Family Operated",
-    body: "One family, one farm. No corporate farming, no distributors. When you order from us, you're ordering from the people who picked it.",
+    body: "One family, one yard. No corporate farming, no distributors. When you order from us, you're ordering from the people who picked it.",
   },
   {
     title: "Peak Season Only",
@@ -57,13 +57,13 @@ export default function HomePage() {
 
         <div className="relative z-10 max-w-4xl">
           <p className="mb-5 inline-block rounded-full border border-[#F97316]/30 bg-[#FFF7ED] px-4 py-1.5 text-sm font-semibold text-[#F97316]">
-            Encinitas, California · Family Farm
+            Encinitas, California · Grown in Our Yard
           </p>
 
           <h1 className="mb-6 text-5xl font-extrabold leading-tight tracking-tight text-[#1C1917] sm:text-7xl">
             Fresh Fruit,{" "}
             <span className="text-[#F97316]">Direct</span>{" "}
-            From Our Farm
+            From Our Yard
           </h1>
 
           <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-[#78716C] sm:text-xl">

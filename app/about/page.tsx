@@ -3,7 +3,7 @@ import ScrollReveal from "@/components/scroll-reveal";
 
 const values = [
   { label: "Founded", sub: "Encinitas, CA · 2016" },
-  { label: "Family Operated", sub: "One family, one farm" },
+  { label: "Family Operated", sub: "One family, one yard" },
   { label: "No Middleman", sub: "Direct from us to you" },
 ];
 
@@ -39,7 +39,7 @@ export default function AboutPage() {
           <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-[#F97316]">Our Story</p>
           <h1 className="mb-3 text-4xl font-extrabold text-[#1C1917] sm:text-5xl">The Ballow Family</h1>
           <p className="mb-14 text-lg text-[#78716C]">
-            A family farm in Encinitas, California — started from fruit we were already growing, built into something we're proud of.
+            A family yard in Encinitas, California — started from fruit we were already growing in our own trees, built into something we're proud of.
           </p>
         </ScrollReveal>
 

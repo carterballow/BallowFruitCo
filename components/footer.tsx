@@ -20,7 +20,7 @@ export default function Footer() {
               />
             </div>
             <p className="text-sm leading-relaxed text-[#78716C]">
-              Family-grown citrus and fruit direct from our farm in Encinitas,
+              Home-grown citrus and fruit from our trees in Encinitas,
               California. Picked at peak ripeness, sold direct to you.
             </p>
           </div>

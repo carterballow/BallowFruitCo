@@ -28,12 +28,28 @@ type DayMeal = {
   recipe_id: string;
   recipe_title: string;
   fruit_used: string[];
+  difficulty?: string;
 };
 
 type DayPlan = {
   day: number;
   date: string;
   meals: DayMeal[];
+};
+
+type GroceryItem = {
+  name: string;
+  reason: string;
+  urgency: "this week" | "optional";
+};
+
+type WasteAlert = {
+  fruit_id: string;
+  fruit_name: string;
+  days_left: number;
+  scheduled_days: number[];
+  warning: string;
+  tip: string;
 };
 
 // ── Star Rating Component ─────────────────────────────────────────────────────
@@ -139,6 +155,8 @@ export default function PlannerPage() {
   const [plan, setPlan] = useState<DayPlan[] | null>(null);
   const [summary, setSummary] = useState<string>("");
   const [planId, setPlanId] = useState<string | null>(null);
+  const [groceryList, setGroceryList] = useState<GroceryItem[]>([]);
+  const [wasteAlerts, setWasteAlerts] = useState<WasteAlert[]>([]);
 
   // ── Step 1: Check auth on mount ───────────────────────────────────────────
   // If the user is not logged in, redirect to login.
@@ -241,6 +259,8 @@ export default function PlannerPage() {
       setPlan(data.plan);
       setSummary(data.summary);
       setPlanId(data.planId);
+      setGroceryList(data.groceryList ?? []);
+      setWasteAlerts(data.wasteAlerts ?? []);
     } catch {
       setError("Network error. Check your connection and try again.");
     } finally {
@@ -560,6 +580,66 @@ export default function PlannerPage() {
                 </div>
               ))}
             </div>
+
+            {/* ── Waste Alerts ─────────────────────────────────── */}
+            {wasteAlerts.length > 0 && (
+              <div className="bg-red-50 border border-red-100 rounded-2xl p-5">
+                <h3 className="font-semibold text-red-800 mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-red-500 inline-block"></span>
+                  Use It or Lose It
+                </h3>
+                <div className="space-y-3">
+                  {wasteAlerts.map((alert) => (
+                    <div key={alert.fruit_id} className="bg-white rounded-xl p-3 border border-red-100">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <p className="font-medium text-red-700 text-sm">{alert.fruit_name}</p>
+                          <p className="text-xs text-gray-600 mt-0.5">{alert.warning}</p>
+                        </div>
+                        <span className="shrink-0 text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">
+                          {alert.days_left} days
+                        </span>
+                      </div>
+                      {alert.tip && (
+                        <p className="text-xs text-gray-400 mt-2 italic border-t border-gray-50 pt-2">
+                          Storage tip: {alert.tip}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ── Grocery List ──────────────────────────────────── */}
+            {groceryList.length > 0 && (
+              <div className="bg-green-50 border border-green-100 rounded-2xl p-5">
+                <h3 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
+                  Smart Grocery List
+                </h3>
+                <p className="text-xs text-green-700 mb-3">
+                  Items to pick up this week to support your meal plan:
+                </p>
+                <div className="space-y-2">
+                  {groceryList.map((item) => (
+                    <div key={item.name} className="flex items-start gap-3">
+                      <span className={`shrink-0 mt-0.5 text-xs px-1.5 py-0.5 rounded font-medium ${
+                        item.urgency === "this week"
+                          ? "bg-green-200 text-green-800"
+                          : "bg-gray-100 text-gray-600"
+                      }`}>
+                        {item.urgency === "this week" ? "needed" : "optional"}
+                      </span>
+                      <div>
+                        <p className="text-sm font-medium text-gray-800">{item.name}</p>
+                        <p className="text-xs text-gray-500">{item.reason}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Regenerate link */}
             <div className="text-center pt-2">

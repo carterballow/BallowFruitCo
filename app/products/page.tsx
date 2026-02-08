@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ScrollReveal from "@/components/scroll-reveal";
@@ -119,7 +119,13 @@ const products = [
 ];
 
 // ─── ProductCard ──────────────────────────────────────────
-function ProductCard({ product }: { product: (typeof products)[0] }) {
+function ProductCard({
+  product,
+  stock,
+}: {
+  product: (typeof products)[0];
+  stock: number | null;
+}) {
   const { addItem, items, updateQty } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
@@ -226,9 +232,19 @@ function ProductCard({ product }: { product: (typeof products)[0] }) {
                 </span>
               </div>
 
+              {/* Stock indicator */}
+              {stock !== null && (
+                <p className={`mb-2 text-xs font-medium ${
+                  stock <= 10 ? "text-red-500" : stock <= 30 ? "text-amber-600" : "text-green-600"
+                }`}>
+                  {stock <= 0 ? "Out of stock" : stock <= 10 ? `Only ${stock} left` : stock <= 30 ? `${stock} remaining` : `${stock} in stock`}
+                </p>
+              )}
+
               <button
                 onClick={handleAdd}
-                className="w-full rounded-lg py-3 text-sm font-semibold text-white transition-all"
+                disabled={stock !== null && stock <= 0}
+                className="w-full rounded-lg py-3 text-sm font-semibold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 style={{ backgroundColor: added ? "#22C55E" : "#F97316" }}
               >
                 {added ? "✓ Added to cart!" : inCart ? "Add more to cart" : "Add to Cart"}
@@ -254,6 +270,19 @@ function ProductCard({ product }: { product: (typeof products)[0] }) {
 
 // ─── Page ─────────────────────────────────────────────────
 export default function ProductsPage() {
+  const [inventory, setInventory] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    fetch("/api/inventory")
+      .then((r) => r.json())
+      .then((data: Array<{ fruit_id: string; quantity: number }>) => {
+        const map: Record<string, number> = {};
+        for (const item of data) map[item.fruit_id] = item.quantity;
+        setInventory(map);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#FFFBF5] px-6 py-16">
       <div className="mx-auto max-w-6xl">
@@ -268,7 +297,10 @@ export default function ProductsPage() {
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((p, i) => (
             <ScrollReveal key={p.id} delay={i * 100}>
-              <ProductCard product={p} />
+              <ProductCard
+                product={p}
+                stock={inventory[p.id] !== undefined ? inventory[p.id] : null}
+              />
             </ScrollReveal>
           ))}
         </div>

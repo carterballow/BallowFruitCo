@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL ?? "http://localhost:3000"),
   title: "Ballow Fruit Co.",
   description:
-    "Order fresh naval oranges, blood oranges, lemons, limes, pomegranates, and avocados direct from the Ballow family farm in Encinitas, California.",
+    "Order fresh naval oranges, blood oranges, lemons, limes, pomegranates, and avocados grown in the Ballow family yard in Encinitas, California.",
   icons: {
     icon: "/ballowfruitcometadata.png",
     apple: "/ballowfruitcometadata.png",

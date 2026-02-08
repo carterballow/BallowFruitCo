@@ -87,5 +87,8 @@ export async function POST(req: NextRequest) {
     planId: savedPlan?.id ?? null,
     plan: plan.days,
     summary: plan.summary,
+    groceryList: plan.groceryList,
+    wasteAlerts: plan.wasteAlerts,
+    ragContextSummary: plan.ragContextSummary,
   });
 }
