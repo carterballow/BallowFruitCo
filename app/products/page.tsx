@@ -41,7 +41,7 @@ const products = [
     flavor: "Sweet-tart with a subtle raspberry note",
     season: "December – March",
     inSeason: true,
-    image: "/blood-orange.png",
+    image: "/bloodorange.png",
     imagePosition: "center",
     accent: "#DC2626",
     accentLight: "#FEF2F2",
@@ -92,7 +92,7 @@ const products = [
     flavor: "Bold, sweet-tart, rich with wine-like complexity",
     season: "September – November",
     inSeason: false,
-    image: "/pomegranate.png",
+    image: "/pomegranite.png",
     imagePosition: "center",
     accent: "#BE123C",
     accentLight: "#FFF1F2",
@@ -111,7 +111,7 @@ const products = [
     inSeason: false,
     // Photo has 3 avocados side-by-side — center crop lands on the
     // middle one (halved, pit visible)
-    image: "/avocado.jpeg",
+    image: "/avocado.png",
     imagePosition: "center",
     accent: "#65A30D",
     accentLight: "#F7FEE7",
@@ -152,67 +152,60 @@ function ProductCard({
   };
 
   return (
-    // When out of season, the whole card is subtly grayed out
     <div
-      className="card-shadow card-shadow-hover flex flex-col overflow-hidden rounded-2xl border border-[#F0E8DC] bg-white transition-all"
-      style={{ opacity: product.inSeason ? 1 : 0.55 }}
+      className="flex flex-col border border-[#E2D9CE] bg-white transition-all"
+      style={{ opacity: product.inSeason ? 1 : 0.5 }}
     >
-      {/* Product photo */}
-      <div className="relative h-56 w-full overflow-hidden bg-white">
+      {/* Photo */}
+      <div className="relative aspect-[3/2] w-full overflow-hidden bg-[#F8F5F0]">
         <Image
           src={product.image}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-500 hover:scale-105"
+          className="object-cover transition-transform duration-700 hover:scale-105"
           style={{ objectPosition: product.imagePosition }}
           sizes="(max-width: 768px) 100vw, 33vw"
         />
-        {/* Season badge — floats over the photo */}
-        <span
-          className="absolute top-3 right-3 rounded-full px-3 py-1 text-xs font-semibold shadow-sm"
-          style={{
-            backgroundColor: product.inSeason ? "#D1FAE5" : "#F3F4F6",
-            color: product.inSeason ? "#065F46" : "#6B7280",
-          }}
-        >
-          {product.inSeason ? "✓ In Season" : "Out of Season"}
+        <span className={`absolute top-3 left-3 px-2.5 py-1 text-xs font-medium tracking-wide ${
+          product.inSeason
+            ? "bg-white text-[#111111]"
+            : "bg-[#111111]/70 text-white"
+        }`}>
+          {product.inSeason ? "In Season" : "Out of Season"}
         </span>
       </div>
 
       {/* Info */}
-      <div className="flex flex-1 flex-col p-6">
-        <div className="mb-4 flex items-start justify-between gap-4">
+      <div className="flex flex-1 flex-col border-t border-[#E2D9CE] p-5">
+        <div className="mb-4 flex items-start justify-between gap-2">
           <div>
-            <h2 className="text-xl font-bold text-[#1C1917]">{product.name}</h2>
-            <p className="text-sm text-[#78716C]">{product.tagline}</p>
+            <h2 className="font-medium text-[#111111]">{product.name}</h2>
+            <p className="text-sm text-[#6B6560]">{product.tagline}</p>
           </div>
           <div className="shrink-0 text-right">
-            <p className="text-2xl font-extrabold text-[#F97316]">{product.priceDisplay}</p>
-            <p className="text-xs text-[#A8A29E]">{product.unit}</p>
+            <p className="font-semibold text-[#111111]">{product.priceDisplay}</p>
+            <p className="text-xs text-[#9C9490]">{product.unit}</p>
           </div>
         </div>
 
         {/* Expandable details */}
         <button
           onClick={() => setOpen(!open)}
-          className="mb-4 flex items-center gap-1 text-xs font-medium text-[#78716C] hover:text-[#F97316]"
+          className="mb-4 text-left text-xs text-[#9C9490] underline underline-offset-2 hover:text-[#111111]"
         >
-          {open ? "Hide details ↑" : "Learn more about this fruit ↓"}
+          {open ? "Hide details" : "Details + flavor notes"}
         </button>
         {open && (
-          <div
-            className="mb-5 rounded-xl p-4 text-sm leading-relaxed text-[#78716C]"
-            style={{ backgroundColor: product.accentLight }}
-          >
+          <div className="mb-4 border-t border-[#E2D9CE] pt-4 text-sm leading-relaxed text-[#6B6560]">
             <p className="mb-3">{product.description}</p>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div>
-                <p className="font-semibold uppercase tracking-wide" style={{ color: product.accent }}>Flavor</p>
-                <p className="mt-0.5 text-[#1C1917]">{product.flavor}</p>
+                <p className="mb-0.5 text-xs font-medium uppercase tracking-[0.15em] text-[#9C9490]">Flavor</p>
+                <p className="text-[#111111]">{product.flavor}</p>
               </div>
               <div>
-                <p className="font-semibold uppercase tracking-wide" style={{ color: product.accent }}>Season</p>
-                <p className="mt-0.5 text-[#1C1917]">{product.season}</p>
+                <p className="mb-0.5 text-xs font-medium uppercase tracking-[0.15em] text-[#9C9490]">Season</p>
+                <p className="text-[#111111]">{product.season}</p>
               </div>
             </div>
           </div>
@@ -222,43 +215,39 @@ function ProductCard({
           {product.inSeason ? (
             <>
               <div className="mb-3 flex items-center gap-3">
-                <div className="flex items-center rounded-lg border border-[#E0D4C4] bg-[#FDF8F2]">
-                  <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="px-3 py-2 text-base font-medium text-[#78716C] hover:text-[#F97316]">−</button>
-                  <span className="w-8 text-center text-sm font-semibold text-[#1C1917]">{qty}</span>
-                  <button onClick={() => setQty((q) => Math.min(20, q + 1))} className="px-3 py-2 text-base font-medium text-[#78716C] hover:text-[#F97316]">+</button>
+                <div className="flex items-center border border-[#E2D9CE]">
+                  <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="px-3 py-2 text-sm text-[#6B6560] hover:text-[#111111]">−</button>
+                  <span className="w-8 text-center text-sm font-medium text-[#111111]">{qty}</span>
+                  <button onClick={() => setQty((q) => Math.min(20, q + 1))} className="px-3 py-2 text-sm text-[#6B6560] hover:text-[#111111]">+</button>
                 </div>
-                <span className="text-xs text-[#A8A29E]">
-                  ≈ ${((product.price * qty) / 100).toFixed(0)} total
+                <span className="text-xs text-[#9C9490]">
+                  ${((product.price * qty) / 100).toFixed(0)} total
                 </span>
+                {stock !== null && stock <= 30 && (
+                  <span className={`ml-auto text-xs ${stock <= 10 ? "text-red-600" : "text-[#9C9490]"}`}>
+                    {stock <= 0 ? "Out of stock" : `${stock} left`}
+                  </span>
+                )}
               </div>
-
-              {/* Stock indicator */}
-              {stock !== null && (
-                <p className={`mb-2 text-xs font-medium ${
-                  stock <= 10 ? "text-red-500" : stock <= 30 ? "text-amber-600" : "text-green-600"
-                }`}>
-                  {stock <= 0 ? "Out of stock" : stock <= 10 ? `Only ${stock} left` : stock <= 30 ? `${stock} remaining` : `${stock} in stock`}
-                </p>
-              )}
 
               <button
                 onClick={handleAdd}
                 disabled={stock !== null && stock <= 0}
-                className="w-full rounded-lg py-3 text-sm font-semibold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                style={{ backgroundColor: added ? "#22C55E" : "#F97316" }}
+                className="w-full py-3 text-sm font-medium tracking-wide text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                style={{ backgroundColor: added ? "#2D6A4F" : "#111111" }}
               >
-                {added ? "✓ Added to cart!" : inCart ? "Add more to cart" : "Add to Cart"}
+                {added ? "Added" : inCart ? "Add More" : "Add to Cart"}
               </button>
 
               {inCart && (
-                <p className="mt-2.5 text-center text-xs text-[#78716C]">
-                  {cartItem.quantity} {cartItem.quantity === 1 ? product.unit : `× ${product.unit}`} in cart —{" "}
-                  <Link href="/order" className="font-medium text-[#F97316] underline underline-offset-2">View cart</Link>
+                <p className="mt-2 text-center text-xs text-[#9C9490]">
+                  {cartItem.quantity} in cart —{" "}
+                  <Link href="/order" className="text-[#111111] underline underline-offset-2">View</Link>
                 </p>
               )}
             </>
           ) : (
-            <div className="rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] py-3 text-center text-sm text-[#6B7280]">
+            <div className="border border-[#E2D9CE] py-3 text-center text-sm text-[#9C9490]">
               Available {product.season}
             </div>
           )}
@@ -284,19 +273,23 @@ export default function ProductsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FFFBF5] px-6 py-16">
-      <div className="mx-auto max-w-6xl">
-        <ScrollReveal>
-          <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-[#F97316]">The Catalog</p>
-          <h1 className="mb-3 text-4xl font-extrabold text-[#1C1917] sm:text-5xl">Our Fruit</h1>
-          <p className="mb-14 max-w-xl text-[#78716C]">
-            Grayed out products are currently out of season — check back when they&apos;re available.
-          </p>
-        </ScrollReveal>
+    <div className="min-h-screen bg-[#F8F5F0]">
+      <div className="border-b border-[#E2D9CE]">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <ScrollReveal>
+            <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">The Catalog</p>
+            <h1 className="text-4xl font-light tracking-tight text-[#111111] sm:text-5xl">Our Fruit</h1>
+            <p className="mt-3 text-[#6B6560]">
+              Out-of-season items are grayed out — check back when they&apos;re available.
+            </p>
+          </ScrollReveal>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mx-auto max-w-7xl px-6 py-12">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((p, i) => (
-            <ScrollReveal key={p.id} delay={i * 100}>
+            <ScrollReveal key={p.id} delay={i * 80}>
               <ProductCard
                 product={p}
                 stock={inventory[p.id] !== undefined ? inventory[p.id] : null}
@@ -305,13 +298,14 @@ export default function ProductsPage() {
           ))}
         </div>
 
-        <ScrollReveal delay={300}>
-          <div className="mt-16 rounded-2xl border border-[#F0E8DC] bg-white p-8 text-center card-shadow">
-            <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-[#F97316]">Ready to order?</p>
-            <h2 className="mb-3 text-2xl font-bold text-[#1C1917]">View Cart &amp; Checkout</h2>
-            <p className="mb-6 text-sm text-[#78716C]">Secure payment via Stripe. Receipt sent to your email automatically.</p>
-            <Link href="/order" className="inline-flex items-center gap-2 rounded-md bg-[#F97316] px-8 py-3 text-sm font-semibold text-white transition-all hover:bg-[#EA580C]">
-              Go to Cart →
+        <ScrollReveal delay={200}>
+          <div className="mt-12 border border-[#E2D9CE] bg-white p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p className="font-medium text-[#111111]">Ready to check out?</p>
+              <p className="text-sm text-[#6B6560]">Secure payment via Stripe. Receipt sent automatically.</p>
+            </div>
+            <Link href="/order" className="shrink-0 border border-[#111111] px-8 py-3 text-sm font-medium tracking-wide text-[#111111] transition-colors hover:bg-[#111111] hover:text-white">
+              View Cart →
             </Link>
           </div>
         </ScrollReveal>

@@ -2,21 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import ScrollReveal from "@/components/scroll-reveal";
 
-const highlights = [
-  {
-    title: "Coastal Grown",
-    body: "Encinitas sits in a rare coastal microclimate — warm days, cool nights, ocean air. It produces some of the best citrus in California.",
-  },
-  {
-    title: "Family Operated",
-    body: "One family, one yard. No corporate farming, no distributors. When you order from us, you're ordering from the people who picked it.",
-  },
-  {
-    title: "Peak Season Only",
-    body: "We only sell what's ripe right now. That means you always get fruit at its absolute best — not fruit picked weeks early to sit in cold storage.",
-  },
-];
-
 const products = [
   {
     name: "Naval Oranges",
@@ -24,188 +9,187 @@ const products = [
     price: "$8",
     unit: "per 5 lb bag",
     image: "/naval-orange.png",
-    imagePosition: "center",
   },
   {
     name: "Blood Oranges",
     tagline: "Deep ruby, complex flavor",
     price: "$10",
     unit: "per 5 lb bag",
-    image: "/blood-orange.png",
-    imagePosition: "center",
+    image: "/bloodorange.png",
   },
   {
     name: "Avocados",
     tagline: "Buttery Hass, tree-ripened",
     price: "$12",
     unit: "per bag of 6",
-    image: "/avocado.jpeg",
-    imagePosition: "center",
+    image: "/avocado.png",
   },
 ];
 
 export default function HomePage() {
   return (
-    <div className="bg-[#FFFBF5]">
+    <div className="bg-[#F8F5F0]">
 
       {/* ── Hero ──────────────────────────────────────────────── */}
-      <section className="relative flex min-h-[88vh] flex-col items-center justify-center overflow-hidden px-6 text-center">
-        {/* Decorative soft blobs in background */}
-        <div className="pointer-events-none absolute -top-24 -right-24 h-[500px] w-[500px] rounded-full bg-orange-100 opacity-60 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-16 -left-16 h-[400px] w-[400px] rounded-full bg-amber-100 opacity-50 blur-3xl" />
-        <div className="pointer-events-none absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-50 opacity-70 blur-2xl" />
-
-        <div className="relative z-10 max-w-4xl">
-          <p className="mb-5 inline-block rounded-full border border-[#F97316]/30 bg-[#FFF7ED] px-4 py-1.5 text-sm font-semibold text-[#F97316]">
-            Encinitas, California · Grown in Our Yard
-          </p>
-
-          <h1 className="mb-6 text-5xl font-extrabold leading-tight tracking-tight text-[#1C1917] sm:text-7xl">
-            Fresh Fruit,{" "}
-            <span className="text-[#F97316]">Direct</span>{" "}
-            From Our Yard
-          </h1>
-
-          <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-[#78716C] sm:text-xl">
-            The Ballow family has been growing citrus in Encinitas for generations.
-            Order online and get fruit picked at peak ripeness — no grocery store,
-            no middleman.
-          </p>
-
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href="/products"
-              className="rounded-md bg-[#F97316] px-8 py-3.5 text-base font-semibold text-white shadow-sm transition-all hover:bg-[#EA580C] hover:shadow-md"
-            >
-              Shop Now
-            </Link>
-            <Link
-              href="/about"
-              className="rounded-md border border-[#E0D4C4] bg-white px-8 py-3.5 text-base font-semibold text-[#1C1917] transition-all hover:border-[#F97316] hover:text-[#F97316]"
-            >
-              Our Story
-            </Link>
-          </div>
-
-          {/* Trust indicators */}
-          <div className="mt-12 flex flex-wrap justify-center gap-6 text-sm text-[#78716C]">
-            <span className="flex items-center gap-1.5"><span className="text-[#F97316]">✓</span> No middleman</span>
-            <span className="flex items-center gap-1.5"><span className="text-[#F97316]">✓</span> Picked at peak ripeness</span>
-            <span className="flex items-center gap-1.5"><span className="text-[#F97316]">✓</span> Secure checkout</span>
+      <section className="border-b border-[#E2D9CE]">
+        <div className="mx-auto max-w-7xl px-6 py-28 sm:py-40">
+          <div className="max-w-3xl">
+            <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">
+              Encinitas, California — Est. 2016
+            </p>
+            <h1 className="mb-8 text-5xl font-light leading-[1.05] tracking-tight text-[#111111] sm:text-7xl lg:text-8xl">
+              Fruit grown in our yard,<br />
+              <em className="not-italic text-[#C8510A]">sold direct to you.</em>
+            </h1>
+            <p className="mb-10 max-w-xl text-lg leading-relaxed text-[#6B6560]">
+              The Ballow family has been growing citrus and avocados in Encinitas
+              since 2016. No distributors, no cold storage, no middleman.
+            </p>
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                href="/products"
+                className="bg-[#111111] px-8 py-3.5 text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#C8510A]"
+              >
+                Shop Now
+              </Link>
+              <Link
+                href="/about"
+                className="border border-[#C8B9A8] px-8 py-3.5 text-sm font-medium tracking-wide text-[#111111] transition-colors hover:border-[#111111]"
+              >
+                Our Story
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── Products preview ──────────────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <ScrollReveal>
-          <p className="mb-2 text-center text-sm font-semibold uppercase tracking-widest text-[#F97316]">Now Available</p>
-          <h2 className="mb-3 text-center text-3xl font-extrabold text-[#1C1917] sm:text-4xl">
-            What&apos;s In Season
-          </h2>
-          <p className="mb-14 text-center text-[#78716C]">
-            Three products. That&apos;s it. We grow what we&apos;re good at.
-          </p>
-        </ScrollReveal>
+      {/* ── What's in season ──────────────────────────────────── */}
+      <section className="border-b border-[#E2D9CE]">
+        <div className="mx-auto max-w-7xl px-6 py-20">
+          <ScrollReveal>
+            <div className="mb-12 flex items-baseline justify-between">
+              <div>
+                <p className="mb-1 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">Now Available</p>
+                <h2 className="text-3xl font-light tracking-tight text-[#111111]">What&apos;s in Season</h2>
+              </div>
+              <Link
+                href="/products"
+                className="hidden text-sm text-[#6B6560] underline underline-offset-4 hover:text-[#111111] sm:block"
+              >
+                View all →
+              </Link>
+            </div>
+          </ScrollReveal>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-          {products.map((p, i) => (
-            <ScrollReveal key={p.name} delay={i * 100}>
-              <Link href="/products" className="group block">
-                <div className="card-shadow card-shadow-hover overflow-hidden rounded-2xl border border-[#F0E8DC] bg-white transition-all">
-                  <div className="relative h-44 w-full overflow-hidden bg-white">
+          <div className="grid grid-cols-1 gap-0 border border-[#E2D9CE] sm:grid-cols-3">
+            {products.map((p, i) => (
+              <ScrollReveal key={p.name} delay={i * 80}>
+                <Link href="/products" className="group block border-b border-[#E2D9CE] sm:border-b-0 sm:border-r last:border-r-0">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-white">
                     <Image
                       src={p.image}
                       alt={p.name}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      style={{ objectPosition: p.imagePosition }}
+                      className="object-cover transition-transform duration-700 group-hover:scale-103"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
                   </div>
-                  <div className="p-5">
-                    <h3 className="text-lg font-bold text-[#1C1917]">{p.name}</h3>
-                    <p className="mb-3 text-sm text-[#78716C]">{p.tagline}</p>
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-2xl font-extrabold text-[#F97316]">{p.price}</span>
-                      <span className="text-xs text-[#A8A29E]">{p.unit}</span>
+                  <div className="border-t border-[#E2D9CE] bg-white p-5">
+                    <div className="flex items-baseline justify-between">
+                      <div>
+                        <p className="font-medium text-[#111111]">{p.name}</p>
+                        <p className="text-sm text-[#6B6560]">{p.tagline}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-[#111111]">{p.price}</p>
+                        <p className="text-xs text-[#9C9490]">{p.unit}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </ScrollReveal>
-          ))}
-        </div>
-
-        <ScrollReveal delay={300}>
-          <div className="mt-10 text-center">
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 rounded-md border border-[#E0D4C4] bg-white px-6 py-3 text-sm font-semibold text-[#1C1917] transition-all hover:border-[#F97316] hover:text-[#F97316]"
-            >
-              Shop all products →
-            </Link>
-          </div>
-        </ScrollReveal>
-      </section>
-
-      {/* ── Why Ballow ────────────────────────────────────────── */}
-      <section className="bg-[#FDF8F2] px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <ScrollReveal>
-            <h2 className="mb-14 text-center text-3xl font-extrabold text-[#1C1917] sm:text-4xl">
-              Why Order From Us?
-            </h2>
-          </ScrollReveal>
-
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {highlights.map((h, i) => (
-              <ScrollReveal key={h.title} delay={i * 120}>
-                <div className="card-shadow rounded-2xl border border-[#F0E8DC] bg-white p-7">
-                  <h3 className="mb-2 text-lg font-bold text-[#1C1917]">{h.title}</h3>
-                  <p className="text-sm leading-relaxed text-[#78716C]">{h.body}</p>
-                </div>
+                </Link>
               </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Story banner ──────────────────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <ScrollReveal>
-          <div className="rounded-3xl bg-[#F97316] px-8 py-16 text-center text-white sm:px-16">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-widest opacity-80">The Ballow Family</p>
-            <h2 className="mb-5 text-3xl font-extrabold sm:text-4xl">
-              Grown with care since day one
-            </h2>
-            <p className="mx-auto mb-8 max-w-xl text-base leading-relaxed opacity-90">
-              We sell direct because you deserve fruit that actually tastes like fruit —
-              not something picked weeks early and shipped across the country.
-            </p>
-            <Link
-              href="/about"
-              className="inline-block rounded-md bg-white px-7 py-3 text-sm font-semibold text-[#F97316] transition-all hover:bg-orange-50"
-            >
-              Read our story →
-            </Link>
+      {/* ── Why direct ────────────────────────────────────────── */}
+      <section className="border-b border-[#E2D9CE]">
+        <div className="mx-auto max-w-7xl px-6 py-20">
+          <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
+            <ScrollReveal>
+              <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">Why Order From Us</p>
+              <h2 className="text-3xl font-light leading-snug tracking-tight text-[#111111] sm:text-4xl">
+                Grocery stores want fruit that ships well.<br />
+                We grow for flavor.
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal delay={100}>
+              <div className="space-y-8 pt-2">
+                {[
+                  {
+                    label: "Picked at peak ripeness",
+                    body: "Every order leaves our trees at the right moment — not weeks early to survive cold storage and shipping."
+                  },
+                  {
+                    label: "One family, one yard",
+                    body: "You're ordering from the people who grew it. No corporate farming, no distributors, no markup chain."
+                  },
+                  {
+                    label: "Coastal microclimate",
+                    body: "Encinitas has warm days, cool nights, and ocean air — conditions that concentrate flavor in a way that inland growing can't replicate."
+                  }
+                ].map((item) => (
+                  <div key={item.label} className="border-t border-[#E2D9CE] pt-6">
+                    <p className="mb-2 text-sm font-semibold text-[#111111]">{item.label}</p>
+                    <p className="text-sm leading-relaxed text-[#6B6560]">{item.body}</p>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
           </div>
-        </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ── Story strip ───────────────────────────────────────── */}
+      <section className="border-b border-[#E2D9CE] bg-[#111111]">
+        <div className="mx-auto max-w-7xl px-6 py-20">
+          <ScrollReveal>
+            <div className="max-w-2xl">
+              <p className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">The Ballow Family</p>
+              <p className="mb-8 text-2xl font-light leading-relaxed text-white sm:text-3xl">
+                &ldquo;We had more fruit growing in our yard than we knew what to do with.
+                Instead of letting it go to waste, we started sharing it.&rdquo;
+              </p>
+              <Link
+                href="/about"
+                className="border border-white/30 px-7 py-3 text-sm font-medium tracking-wide text-white transition-colors hover:border-white hover:bg-white hover:text-[#111111]"
+              >
+                Read our story →
+              </Link>
+            </div>
+          </ScrollReveal>
+        </div>
       </section>
 
       {/* ── CTA ───────────────────────────────────────────────── */}
-      <section className="border-t border-[#F0E8DC] bg-[#FDF8F2] px-6 py-20 text-center">
-        <ScrollReveal>
-          <h2 className="mb-4 text-3xl font-extrabold text-[#1C1917]">Ready to taste the difference?</h2>
-          <p className="mb-8 text-[#78716C]">Secure checkout. Picked fresh. Straight from Encinitas.</p>
-          <Link
-            href="/products"
-            className="inline-block rounded-md bg-[#F97316] px-10 py-3.5 text-base font-semibold text-white transition-all hover:bg-[#EA580C]"
-          >
-            Shop Now
-          </Link>
-        </ScrollReveal>
+      <section>
+        <div className="mx-auto max-w-7xl px-6 py-20 text-center">
+          <ScrollReveal>
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">Ready to Order</p>
+            <h2 className="mb-6 text-3xl font-light tracking-tight text-[#111111]">
+              Picked fresh. Sold direct.
+            </h2>
+            <Link
+              href="/products"
+              className="inline-block bg-[#111111] px-10 py-3.5 text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#C8510A]"
+            >
+              Shop Now
+            </Link>
+          </ScrollReveal>
+        </div>
       </section>
+
     </div>
   );
 }

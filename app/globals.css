@@ -2,49 +2,51 @@
 
 /* ─── Design Tokens ─────────────────────────────────────── */
 @theme inline {
-  /* Brand palette */
-  --color-orange:       #F97316;
-  --color-orange-dark:  #EA580C;
-  --color-orange-pale:  #FFF7ED;
-  --color-yellow:       #F59E0B;
-  --color-red:          #DC2626;
+  --color-orange:       #C8510A;
+  --color-orange-dark:  #9A3D07;
+  --color-orange-pale:  #FEF3E8;
 
-  /* Light surfaces */
-  --color-cream:        #FFFBF5;
+  --color-cream:        #F8F5F0;
   --color-surface:      #FFFFFF;
-  --color-surface-2:    #FDF8F2;
-  --color-border:       #F0E8DC;
-  --color-border-dark:  #E0D4C4;
+  --color-surface-2:    #F2EDE6;
+  --color-border:       #E2D9CE;
+  --color-border-dark:  #C8B9A8;
 
-  /* Text */
-  --color-text:         #1C1917;
-  --color-muted:        #78716C;
-  --color-muted-light:  #A8A29E;
+  --color-text:         #111111;
+  --color-muted:        #6B6560;
+  --color-muted-light:  #9C9490;
 
-  /* Fonts */
   --font-sans: var(--font-geist-sans);
 }
 
 /* ─── Base ───────────────────────────────────────────────── */
 body {
-  background: #FFFBF5;
-  color: #1C1917;
+  background: #F8F5F0;
+  color: #111111;
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ─── Card shadows ───────────────────────────────────────── */
+/* ─── Editorial rule ─────────────────────────────────────── */
+.rule {
+  border: none;
+  border-top: 1px solid #E2D9CE;
+  margin: 0;
+}
+
+/* ─── Card ───────────────────────────────────────────────── */
 .card-shadow {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
 .card-shadow-hover:hover {
-  box-shadow: 0 4px 24px rgba(249,115,22,0.14), 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
 
 /* ─── Scroll Reveal ──────────────────────────────────────── */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .reveal.visible {
   opacity: 1;
