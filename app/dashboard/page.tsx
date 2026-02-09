@@ -1,13 +1,9 @@
 /**
  * /dashboard — User Home Base
  *
- * Server component — runs on the server so it can safely query Supabase directly.
- * Shows:
- *   1. Past orders (from the orders table)
- *   2. Past meal plans (from meal_plans table)
- *   3. Quick links to planner and shop
- *
- * If not logged in, redirects to login.
+ * Server component — runs on the server so it can query Supabase directly.
+ * Shows past orders, past meal plans, and quick nav links.
+ * Redirects to /auth/login if not logged in.
  */
 
 import { redirect } from "next/navigation";
@@ -40,7 +36,6 @@ export default async function DashboardPage() {
 
   if (!user) redirect("/auth/login");
 
-  // Fetch past orders and meal plans in parallel
   const [ordersResult, plansResult] = await Promise.all([
     supabase
       .from("orders")
@@ -59,7 +54,6 @@ export default async function DashboardPage() {
   const orders = (ordersResult.data ?? []) as Order[];
   const mealPlans = (plansResult.data ?? []) as MealPlan[];
 
-  // Get user's initials for the avatar
   const email = user.email ?? "";
   const initials = email.slice(0, 2).toUpperCase();
 
@@ -76,100 +70,104 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAF7]">
+    <div className="bg-[#F8F5F0] min-h-screen">
+
       {/* Header */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-5xl mx-auto px-6 py-8">
+      <div className="border-b border-[#E2D9CE]">
+        <div className="mx-auto max-w-4xl px-6 py-12">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold text-lg">
+            <div className="flex h-10 w-10 items-center justify-center border border-[#E2D9CE] bg-white text-sm font-medium text-[#111111]">
               {initials}
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Your Dashboard</h1>
-              <p className="text-sm text-gray-500">{email}</p>
+              <p className="mb-0.5 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">Account</p>
+              <h1 className="text-2xl font-light text-[#111111]">Dashboard</h1>
+              <p className="text-xs text-[#9C9490]">{email}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
+      <div className="mx-auto max-w-4xl px-6 py-10 space-y-8">
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-px border border-[#E2D9CE] sm:grid-cols-3">
           <Link
             href="/planner"
-            className="bg-orange-500 text-white rounded-2xl p-5 hover:bg-orange-600 transition-colors"
+            className="bg-[#111111] p-5 transition-colors hover:bg-[#C8510A]"
           >
-            <div className="font-semibold mb-1">Generate a New Plan</div>
-            <div className="text-sm opacity-90">AI-powered 7-day meal plan from your cart</div>
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-white/60 mb-1">Go to</p>
+            <p className="font-medium text-white">AI Meal Planner</p>
+            <p className="mt-1 text-xs text-white/70">Generate your 7-day plan</p>
           </Link>
           <Link
             href="/products"
-            className="bg-white border border-gray-100 rounded-2xl p-5 hover:border-orange-200 transition-colors shadow-sm"
+            className="bg-white p-5 transition-colors hover:bg-[#F8F5F0]"
           >
-            <div className="font-semibold text-gray-900 mb-1">Shop Fruit</div>
-            <div className="text-sm text-gray-500">Add this week&apos;s fruit to your cart</div>
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-[#9C9490] mb-1">Browse</p>
+            <p className="font-medium text-[#111111]">Shop Fruit</p>
+            <p className="mt-1 text-xs text-[#9C9490]">Add this week&apos;s order</p>
           </Link>
           <Link
             href="/recipes"
-            className="bg-white border border-gray-100 rounded-2xl p-5 hover:border-orange-200 transition-colors shadow-sm"
+            className="bg-white p-5 border-l border-[#E2D9CE] transition-colors hover:bg-[#F8F5F0]"
           >
-            <div className="font-semibold text-gray-900 mb-1">Browse Recipes</div>
-            <div className="text-sm text-gray-500">Ideas for using your fruit this week</div>
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-[#9C9490] mb-1">Explore</p>
+            <p className="font-medium text-[#111111]">Recipes</p>
+            <p className="mt-1 text-xs text-[#9C9490]">Ideas for your fruit</p>
           </Link>
         </div>
 
         {/* Past Meal Plans */}
-        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-semibold text-gray-900">Past Meal Plans</h2>
-            <Link href="/planner" className="text-sm text-orange-500 hover:text-orange-600 font-medium">
+        <section className="border border-[#E2D9CE] bg-white">
+          <div className="flex items-center justify-between border-b border-[#E2D9CE] px-6 py-4">
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-[#9C9490]">Past Meal Plans</p>
+            <Link href="/planner" className="text-xs font-medium text-[#111111] underline underline-offset-2 hover:text-[#C8510A]">
               New plan →
             </Link>
           </div>
 
           {mealPlans.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-400 mb-3">No meal plans yet.</p>
+            <div className="px-6 py-10 text-center">
+              <p className="mb-4 text-sm text-[#6B6560]">No meal plans yet.</p>
               <Link
                 href="/planner"
-                className="inline-block bg-orange-500 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-orange-600"
+                className="inline-block bg-[#111111] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#C8510A]"
               >
                 Generate Your First Plan
               </Link>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="divide-y divide-[#E2D9CE]">
               {mealPlans.map((plan) => {
                 const totalMeals = plan.plan?.reduce((sum, d) => sum + d.meals.length, 0) ?? 0;
-                const fruitsUsed = [...new Set(plan.cart_items?.map((i) => i.name) ?? [])];
+                const fruits = [...new Set(plan.cart_items?.map((i) => i.name) ?? [])];
                 return (
-                  <div key={plan.id} className="rounded-xl border border-gray-100 p-4">
+                  <div key={plan.id} className="px-6 py-4">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <div className="font-medium text-gray-900">
+                        <p className="text-sm font-medium text-[#111111]">
                           Week of {formatDate(plan.week_start)}
-                        </div>
-                        <div className="text-sm text-gray-500 mt-0.5">
-                          {totalMeals} meals planned · {fruitsUsed.join(", ")}
-                        </div>
+                        </p>
+                        <p className="mt-0.5 text-xs text-[#9C9490]">
+                          {totalMeals} meals · {fruits.join(", ")}
+                        </p>
                       </div>
-                      <div className="text-xs text-gray-400 shrink-0">
+                      <span className="shrink-0 text-xs text-[#9C9490]">
                         {formatDate(plan.created_at)}
-                      </div>
+                      </span>
                     </div>
 
-                    {/* Show first 3 days as a preview */}
                     {plan.plan && plan.plan.length > 0 && (
                       <div className="mt-3 flex flex-wrap gap-2">
                         {plan.plan.slice(0, 3).map((day) => (
-                          <div key={day.day} className="text-xs bg-orange-50 text-orange-700 px-2.5 py-1 rounded-full border border-orange-100">
+                          <span key={day.day} className="border border-[#E2D9CE] bg-[#F8F5F0] px-2.5 py-1 text-xs text-[#6B6560]">
                             Day {day.day}: {day.meals[0]?.recipe_title ?? "—"}
-                          </div>
+                          </span>
                         ))}
                         {plan.plan.length > 3 && (
-                          <span className="text-xs text-gray-400 px-2.5 py-1">
-                            +{plan.plan.length - 3} more days
+                          <span className="text-xs text-[#9C9490] px-2.5 py-1">
+                            +{plan.plan.length - 3} more
                           </span>
                         )}
                       </div>
@@ -181,33 +179,35 @@ export default async function DashboardPage() {
           )}
         </section>
 
-        {/* Past Orders */}
-        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-900 mb-5">Order History</h2>
+        {/* Order History */}
+        <section className="border border-[#E2D9CE] bg-white">
+          <div className="border-b border-[#E2D9CE] px-6 py-4">
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-[#9C9490]">Order History</p>
+          </div>
 
           {orders.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-400 mb-3">No orders yet.</p>
+            <div className="px-6 py-10 text-center">
+              <p className="mb-4 text-sm text-[#6B6560]">No orders yet.</p>
               <Link
                 href="/products"
-                className="inline-block bg-orange-500 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-orange-600"
+                className="inline-block bg-[#111111] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#C8510A]"
               >
                 Shop Now
               </Link>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="divide-y divide-[#E2D9CE]">
               {orders.map((order) => (
-                <div key={order.id} className="flex items-center justify-between rounded-xl border border-gray-100 px-4 py-3">
+                <div key={order.id} className="flex items-center justify-between px-6 py-4">
                   <div>
-                    <div className="font-medium text-gray-900">{formatDollars(order.total_cents)}</div>
-                    <div className="text-sm text-gray-500">
+                    <p className="text-sm font-medium text-[#111111]">{formatDollars(order.total_cents)}</p>
+                    <p className="mt-0.5 text-xs text-[#9C9490]">
                       {(order.items ?? []).map((i) => `${i.quantity}× ${i.name}`).join(", ")}
-                    </div>
+                    </p>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-gray-400">{formatDate(order.created_at)}</div>
-                    <span className="inline-block mt-1 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full capitalize">
+                    <p className="text-xs text-[#9C9490]">{formatDate(order.created_at)}</p>
+                    <span className="mt-1 inline-block border border-[#E2D9CE] bg-[#F8F5F0] px-2 py-0.5 text-xs font-medium text-[#6B6560] capitalize">
                       {order.status}
                     </span>
                   </div>

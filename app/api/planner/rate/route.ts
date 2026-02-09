@@ -11,7 +11,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "recipe_id and rating (1-5) are required" }, { status: 400 });
   }
 
-  // Upsert: if the user has already rated this recipe, update it
   const { error } = await supabase.from("recipe_ratings").upsert({
     user_id: user.id,
     recipe_id,

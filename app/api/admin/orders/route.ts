@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 
-// Simple admin auth check — reads the password from the request header.
-// The admin layout sets this header using sessionStorage.
 function isAuthorized(req: NextRequest): boolean {
   const password = req.headers.get("x-admin-password");
   return password === process.env.ADMIN_PASSWORD;
 }
 
-// GET /api/admin/orders — returns all orders, newest first
 export async function GET(req: NextRequest) {
   if (!isAuthorized(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -27,7 +24,6 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({ orders: data });
 }
 
-// PATCH /api/admin/orders — marks an order as "done"
 export async function PATCH(req: NextRequest) {
   if (!isAuthorized(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

@@ -60,7 +60,6 @@ export default function AdminPage() {
   return (
     <div className="px-4 py-10">
       <div className="mx-auto max-w-5xl">
-        {/* Header */}
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-[#ededed]">Orders</h1>
@@ -91,12 +90,10 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Orders */}
         {loading ? (
           <p className="text-[#6b7280]">Loading orders...</p>
         ) : displayed.length === 0 ? (
           <div className="rounded-xl border border-[#FF6B00]/20 bg-[#141414] p-12 text-center">
-            <p className="text-4xl">✅</p>
             <p className="mt-3 font-medium text-[#ededed]">
               {filter === "pending" ? "No pending orders!" : "No orders yet."}
             </p>
@@ -113,7 +110,6 @@ export default function AdminPage() {
                 }`}
               >
                 <div className="flex flex-wrap items-start justify-between gap-4">
-                  {/* Left: customer info */}
                   <div>
                     <div className="flex items-center gap-3">
                       <span className="font-bold text-[#ededed]">
@@ -138,18 +134,16 @@ export default function AdminPage() {
                     </p>
                   </div>
 
-                  {/* Right: mark done */}
                   {order.status === "pending" && (
                     <button
                       onClick={() => markDone(order.id)}
                       className="rounded-md bg-[#39FF14] px-4 py-2 text-sm font-semibold text-black hover:bg-[#30d911]"
                     >
-                      Mark Done ✓
+                      Mark Done
                     </button>
                   )}
                 </div>
 
-                {/* Items */}
                 <div className="mt-4 flex flex-wrap gap-2">
                   {order.items?.map((item, i) => (
                     <span
@@ -161,7 +155,6 @@ export default function AdminPage() {
                   ))}
                 </div>
 
-                {/* Message */}
                 {order.message && (
                   <p className="mt-3 rounded-lg bg-[#1c1c1c] px-3 py-2 text-sm text-[#9ca3af]">
                     &quot;{order.message}&quot;

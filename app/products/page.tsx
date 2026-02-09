@@ -6,11 +6,6 @@ import Image from "next/image";
 import ScrollReveal from "@/components/scroll-reveal";
 import { useCart, CartItem } from "@/components/cart-context";
 
-// ─── Product catalog ──────────────────────────────────────
-// Price in cents (800 = $8.00) — Stripe's required format.
-// inSeason drives the entire card UI: in-season cards are full opacity
-// and show an add-to-cart button; out-of-season cards are grayed out
-// with an availability message instead.
 const products = [
   {
     id: "naval-oranges",
@@ -109,8 +104,6 @@ const products = [
     flavor: "Rich, buttery, nutty with a creamy texture",
     season: "April – September",
     inSeason: false,
-    // Photo has 3 avocados side-by-side — center crop lands on the
-    // middle one (halved, pit visible)
     image: "/avocado.png",
     imagePosition: "center",
     accent: "#65A30D",
@@ -118,7 +111,6 @@ const products = [
   },
 ];
 
-// ─── ProductCard ──────────────────────────────────────────
 function ProductCard({
   product,
   stock,
@@ -156,7 +148,6 @@ function ProductCard({
       className="flex flex-col border border-[#E2D9CE] bg-white transition-all"
       style={{ opacity: product.inSeason ? 1 : 0.5 }}
     >
-      {/* Photo */}
       <div className="relative aspect-[3/2] w-full overflow-hidden bg-[#F8F5F0]">
         <Image
           src={product.image}
@@ -175,7 +166,6 @@ function ProductCard({
         </span>
       </div>
 
-      {/* Info */}
       <div className="flex flex-1 flex-col border-t border-[#E2D9CE] p-5">
         <div className="mb-4 flex items-start justify-between gap-2">
           <div>
@@ -188,7 +178,6 @@ function ProductCard({
           </div>
         </div>
 
-        {/* Expandable details */}
         <button
           onClick={() => setOpen(!open)}
           className="mb-4 text-left text-xs text-[#9C9490] underline underline-offset-2 hover:text-[#111111]"
@@ -257,7 +246,6 @@ function ProductCard({
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────
 export default function ProductsPage() {
   const [inventory, setInventory] = useState<Record<string, number>>({});
 

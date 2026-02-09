@@ -2,14 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { getResend, OWNER_EMAIL, FROM_EMAIL } from "@/lib/resend";
 
-// This function runs on the server when someone submits the order form.
-// It receives the form data, saves it to Supabase, then sends two emails.
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { name, email, phone, items, message } = body;
 
-    // Basic validation — make sure required fields are present
     if (!name || !email || !items?.length) {
       return NextResponse.json(
         { error: "Name, email, and at least one item are required." },
@@ -17,7 +14,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // ── Step 1: Save to Supabase ─────────────────────────────
     const supabase = getSupabase();
     const { error: dbError } = await supabase.from("orders").insert({
       customer_name: name,
@@ -33,7 +29,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Failed to save order." }, { status: 500 });
     }
 
-    // ── Step 2: Email the owner ──────────────────────────────
     const itemsSummary = items
       .map((i: { quantity: string; unit: string; fruit: string }) => `${i.quantity} ${i.unit} of ${i.fruit}`)
       .join(", ");
@@ -42,7 +37,7 @@ export async function POST(req: NextRequest) {
     await resend.emails.send({
       from: FROM_EMAIL(),
       to: OWNER_EMAIL(),
-      subject: `🍊 New Order from ${name}`,
+      subject: `New Order from ${name}`,
       html: `
         <h2>New Order — Ballow Fruit Co.</h2>
         <p><strong>From:</strong> ${name}</p>
@@ -55,7 +50,6 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    // ── Step 3: Confirm to the customer ─────────────────────
     await resend.emails.send({
       from: FROM_EMAIL(),
       to: email,
@@ -66,7 +60,7 @@ export async function POST(req: NextRequest) {
         details and arrange pickup or delivery.</p>
         <p><strong>You ordered:</strong> ${itemsSummary}</p>
         ${message ? `<p><strong>Your notes:</strong> ${message}</p>` : ""}
-        <p>— The Ballow Family, Encinitas CA 🍊</p>
+        <p>— The Ballow Family, Encinitas CA</p>
       `,
     });
 

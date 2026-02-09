@@ -15,7 +15,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 401 });
   }
 
-  // Supabase SSR automatically writes the session cookie in the response.
-  // The browser stores it, and every future request sends it back.
   return NextResponse.json({ success: true });
 }

@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// POST /api/admin/auth — checks if the submitted password matches the env var.
-// Returns 200 on success, 401 on failure.
-// The admin layout calls this when the owner submits the login form.
 export async function POST(req: NextRequest) {
   const { password } = await req.json();
 

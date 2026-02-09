@@ -34,7 +34,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geist.variable} min-h-screen antialiased`}>
-        {/* CartProvider wraps everything so every page can read/update the cart */}
         <CartProvider>
           <Navbar />
           <main className="min-h-[calc(100vh-64px)]">{children}</main>

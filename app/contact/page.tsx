@@ -3,76 +3,56 @@ import ScrollReveal from "@/components/scroll-reveal";
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[#FFFBF5] px-6 py-16">
-      <div className="mx-auto max-w-2xl">
-        <ScrollReveal>
-          <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-[#F97316]">
-            Reach Out
-          </p>
-          <h1 className="mb-3 text-4xl font-extrabold text-[#1C1917] sm:text-5xl">
-            Contact Us
-          </h1>
-          <p className="mb-14 text-lg text-[#78716C]">
-            Have a question about availability, quantities, or delivery? We
-            reply to every message personally.
-          </p>
-        </ScrollReveal>
+    <div className="bg-[#F8F5F0]">
+      <div className="border-b border-[#E2D9CE]">
+        <div className="mx-auto max-w-3xl px-6 py-16">
+          <ScrollReveal>
+            <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">Reach Out</p>
+            <h1 className="text-4xl font-light tracking-tight text-[#111111] sm:text-5xl">Contact</h1>
+            <p className="mt-3 text-[#6B6560]">
+              Questions about availability, quantities, or delivery — we reply to every message personally.
+            </p>
+          </ScrollReveal>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="mx-auto max-w-3xl px-6 py-12">
+        <div className="divide-y divide-[#E2D9CE] border border-[#E2D9CE] bg-white">
           {[
-            {
-              label: "Location",
-              value: "Encinitas, California",
-              sub: "San Diego County",
-            },
-            {
-              label: "Email",
-              value: "cartsballow@gmail.com",
-              sub: "We reply within 24 hours",
-              href: "mailto:cartsballow@gmail.com",
-            },
-            {
-              label: "Order Hours",
-              value: "Mon – Sat, 8am – 6pm",
-              sub: "Pacific Time",
-            },
-            {
-              label: "Pickup / Delivery",
-              value: "Local Encinitas Area",
-              sub: "Arrange at time of order",
-            },
+            { label: "Location", value: "Encinitas, California", sub: "San Diego County" },
+            { label: "Email", value: "cartsballow@gmail.com", sub: "We reply within 24 hours", href: "mailto:cartsballow@gmail.com" },
+            { label: "Hours", value: "Mon – Sat, 8am – 6pm", sub: "Pacific Time" },
+            { label: "Pickup & Delivery", value: "Local Encinitas Area", sub: "Arranged at time of order" },
           ].map((item) => (
             <ScrollReveal key={item.label}>
-              <div className="rounded-2xl border border-[#F0E8DC] bg-white p-6 card-shadow">
-                <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-[#F97316]">
+              <div className="flex items-start gap-8 px-6 py-5">
+                <p className="w-28 shrink-0 pt-0.5 text-xs font-medium uppercase tracking-[0.15em] text-[#9C9490]">
                   {item.label}
                 </p>
-                {item.href ? (
-                  <a
-                    href={item.href}
-                    className="block font-semibold text-[#1C1917] transition-colors hover:text-[#F97316]"
-                  >
-                    {item.value}
-                  </a>
-                ) : (
-                  <p className="font-semibold text-[#1C1917]">{item.value}</p>
-                )}
-                <p className="mt-1 text-sm text-[#A8A29E]">{item.sub}</p>
+                <div>
+                  {item.href ? (
+                    <a href={item.href} className="font-medium text-[#111111] transition-colors hover:text-[#C8510A]">
+                      {item.value}
+                    </a>
+                  ) : (
+                    <p className="font-medium text-[#111111]">{item.value}</p>
+                  )}
+                  <p className="mt-0.5 text-sm text-[#9C9490]">{item.sub}</p>
+                </div>
               </div>
             </ScrollReveal>
           ))}
         </div>
 
-        <ScrollReveal delay={200}>
-          <div className="mt-10 rounded-2xl border border-[#F0E8DC] bg-white p-8 text-center card-shadow">
-            <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-[#F97316]">Ready to order?</p>
-            <h2 className="mb-3 text-2xl font-bold text-[#1C1917]">Skip the back-and-forth</h2>
-            <p className="mb-6 text-sm text-[#78716C]">
-              Browse our catalog and check out directly — no need to email first.
-            </p>
+        <ScrollReveal delay={150}>
+          <div className="mt-6 flex flex-col gap-4 border border-[#E2D9CE] bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="font-medium text-[#111111]">Ready to order?</p>
+              <p className="text-sm text-[#6B6560]">Browse the catalog and check out directly — no need to email first.</p>
+            </div>
             <Link
               href="/order"
-              className="inline-block rounded-md bg-[#F97316] px-7 py-3 text-sm font-semibold text-white transition-all hover:bg-[#EA580C]"
+              className="shrink-0 border border-[#111111] px-7 py-3 text-sm font-medium tracking-wide text-[#111111] transition-colors hover:bg-[#111111] hover:text-white"
             >
               Place an Order
             </Link>

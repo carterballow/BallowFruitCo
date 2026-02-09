@@ -16,7 +16,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
   }
 
-  // Fetch user preferences (use defaults if none saved)
   const { data: prefsData } = await supabase
     .from("user_preferences")
     .select("*")
@@ -30,13 +29,11 @@ export async function POST(req: NextRequest) {
     skill_level: "beginner",
   };
 
-  // Fetch past ratings so the planner can boost/suppress recipes
   const { data: ratingsData } = await supabase
     .from("recipe_ratings")
     .select("recipe_id, rating")
     .eq("user_id", user.id);
 
-  // Also fetch dietary_tags for liked recipes to boost similar ones
   const likedIds = (ratingsData ?? [])
     .filter((r) => r.rating >= 4)
     .map((r) => r.recipe_id);
@@ -58,7 +55,6 @@ export async function POST(req: NextRequest) {
     dietary_tags: likedTagsMap[r.recipe_id] ?? [],
   }));
 
-  // Run the planning algorithm
   const plan = await generateWeeklyPlan(
     cartItems,
     prefs,
@@ -66,7 +62,6 @@ export async function POST(req: NextRequest) {
     new Date(weekStart)
   );
 
-  // Save the plan to Supabase so it appears in the user's history
   const { data: savedPlan, error: saveError } = await supabase
     .from("meal_plans")
     .insert({
@@ -80,7 +75,6 @@ export async function POST(req: NextRequest) {
 
   if (saveError) {
     console.error("Failed to save plan:", saveError.message);
-    // Don't fail the request — return the plan even if saving failed
   }
 
   return NextResponse.json({

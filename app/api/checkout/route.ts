@@ -1,24 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 
-/**
- * POST /api/checkout
- *
- * Creates a Stripe Checkout session and returns its URL.
- * The browser then redirects the user to that URL (Stripe's hosted payment page).
- *
- * Flow:
- *   1. Cart page sends { items, customerName, customerEmail }
- *   2. We create a Stripe Checkout session with those items
- *   3. We return { url: "https://checkout.stripe.com/..." }
- *   4. The browser redirects there
- *   5. After payment, Stripe redirects to /checkout/success?session_id=xxx
- */
-
 type CheckoutItem = {
   name: string;
   unit: string;
-  price: number;    // in cents
+  price: number;
   quantity: number;
 };
 
@@ -40,7 +26,6 @@ export async function POST(req: NextRequest) {
       payment_method_types: ["card"],
       mode: "payment",
       customer_email: customerEmail,
-      // Metadata is passed through to the success page so we can save the order
       metadata: {
         customer_name: customerName,
         customer_email: customerEmail,
@@ -52,11 +37,10 @@ export async function POST(req: NextRequest) {
             name: item.name,
             description: item.unit,
           },
-          unit_amount: item.price, // already in cents
+          unit_amount: item.price,
         },
         quantity: item.quantity,
       })),
-      // {CHECKOUT_SESSION_ID} is a Stripe template variable — it fills in automatically
       success_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/order`,
     });

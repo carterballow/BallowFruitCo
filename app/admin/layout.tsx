@@ -13,7 +13,6 @@ export default function AdminLayout({
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    // Check if already logged in this session
     const stored = sessionStorage.getItem("admin_authed");
     if (stored === "true") setAuthed(true);
     setChecking(false);
@@ -28,7 +27,6 @@ export default function AdminLayout({
       body: JSON.stringify({ password }),
     });
     if (res.ok) {
-      // Store both the auth flag and the password so API requests can include it
       sessionStorage.setItem("admin_authed", "true");
       sessionStorage.setItem("admin_pw", password);
       setAuthed(true);
@@ -44,7 +42,6 @@ export default function AdminLayout({
       <div className="flex min-h-screen items-center justify-center bg-[#0A0A0A] px-4">
         <div className="w-full max-w-sm">
           <div className="mb-6 text-center">
-            <span className="text-4xl">🔐</span>
             <h1 className="mt-3 text-2xl font-bold text-[#ededed]">
               Admin Dashboard
             </h1>
@@ -76,7 +73,7 @@ export default function AdminLayout({
       <div className="border-b border-[#FF6B00]/20 bg-[#141414] px-4 py-3">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <span className="font-bold text-[#FF6B00]">
-            🍊 Admin — Ballow Fruit Co.
+            Admin — Ballow Fruit Co.
           </span>
           <button
             onClick={() => {

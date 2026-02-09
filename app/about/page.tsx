@@ -5,7 +5,6 @@ export default function AboutPage() {
   return (
     <div className="bg-[#F8F5F0]">
 
-      {/* ── Header ────────────────────────────────────────────── */}
       <section className="border-b border-[#E2D9CE]">
         <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32">
           <ScrollReveal>
@@ -17,7 +16,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Pull quote ────────────────────────────────────────── */}
       <section className="border-b border-[#E2D9CE] bg-white">
         <div className="mx-auto max-w-7xl px-6 py-16">
           <ScrollReveal>
@@ -30,12 +28,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Story sections ────────────────────────────────────── */}
       <section className="border-b border-[#E2D9CE]">
         <div className="mx-auto max-w-7xl px-6 py-20">
           <div className="grid grid-cols-1 gap-0 lg:grid-cols-[280px_1fr]">
 
-            {/* Left — year index */}
             <div className="border-b border-[#E2D9CE] pb-8 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-16">
               <ScrollReveal>
                 <div className="sticky top-24 space-y-6">
@@ -59,7 +55,6 @@ export default function AboutPage() {
               </ScrollReveal>
             </div>
 
-            {/* Right — story */}
             <div className="pt-8 lg:pl-16 lg:pt-0">
               <div className="max-w-2xl space-y-12">
 
@@ -127,7 +122,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── CTA ───────────────────────────────────────────────── */}
       <section>
         <div className="mx-auto max-w-7xl px-6 py-16">
           <ScrollReveal>

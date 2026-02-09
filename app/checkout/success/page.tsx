@@ -1,17 +1,3 @@
-/**
- * /checkout/success — shown after a successful Stripe payment
- *
- * Plain-English flow:
- *  1. Stripe redirects here with ?session_id=cs_xxx after payment
- *  2. We fetch the session from Stripe to verify payment actually happened
- *  3. We save the order to Supabase (with a duplicate check so refreshing is safe)
- *  4. We send a receipt email to the customer and a notification to the owner
- *  5. We show a nice confirmation UI
- *
- * This is a server component — it runs on the server, not in the browser.
- * That's why we can safely call Stripe, Supabase, and Resend here.
- */
-
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getStripe } from "@/lib/stripe";
@@ -19,7 +5,6 @@ import { getSupabase } from "@/lib/supabase";
 import { getResend, OWNER_EMAIL, FROM_EMAIL } from "@/lib/resend";
 import ClearCart from "@/components/clear-cart";
 
-// In Next.js 15+, searchParams is a Promise
 type Props = {
   searchParams: Promise<{ session_id?: string }>;
 };
@@ -28,10 +13,8 @@ export default async function SuccessPage({ searchParams }: Props) {
   const params = await searchParams;
   const sessionId = params.session_id;
 
-  // If no session ID, something's wrong — redirect home
   if (!sessionId) redirect("/");
 
-  // ── Fetch the Stripe session ──────────────────────────────
   const stripe = getStripe();
   let session;
   try {
@@ -42,7 +25,6 @@ export default async function SuccessPage({ searchParams }: Props) {
     redirect("/");
   }
 
-  // Verify the payment actually went through
   if (session.payment_status !== "paid") {
     redirect("/order");
   }
@@ -53,12 +35,10 @@ export default async function SuccessPage({ searchParams }: Props) {
   const totalDollars = (totalCents / 100).toFixed(2);
   const lineItems = session.line_items?.data ?? [];
 
-  // ── Save to Supabase (only once — check for duplicates first) ──
   let isNew = false;
   try {
     const supabase = getSupabase();
 
-    // Check if we already processed this session
     const { data: existing } = await supabase
       .from("orders")
       .select("id")
@@ -80,9 +60,6 @@ export default async function SuccessPage({ searchParams }: Props) {
         status: "paid",
       });
 
-      // Decrement inventory for each fruit ordered.
-      // Map Stripe line item descriptions back to fruit IDs.
-      // Description format is the product name e.g. "Naval Oranges"
       const nameToFruitId: Record<string, string> = {
         "Naval Oranges": "naval-oranges",
         "Blood Oranges": "blood-oranges",
@@ -104,16 +81,13 @@ export default async function SuccessPage({ searchParams }: Props) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ items: inventoryItems }),
-        }).catch(() => {});  // non-blocking — inventory failure shouldn't break success page
+        }).catch(() => {});
       }
     }
   } catch (err) {
-    // Database error — log it but don't crash the page
-    // Payment already went through, so we still show success
     console.error("Supabase save error:", err);
   }
 
-  // ── Send emails (only for new orders) ────────────────────
   if (isNew && customerEmail) {
     try {
       const resend = getResend();
@@ -125,7 +99,6 @@ export default async function SuccessPage({ searchParams }: Props) {
         )
         .join("");
 
-      // Receipt to customer
       await resend.emails.send({
         from: FROM_EMAIL(),
         to: customerEmail,
@@ -150,7 +123,6 @@ export default async function SuccessPage({ searchParams }: Props) {
         `,
       });
 
-      // Notification to owner
       const ownerEmail = OWNER_EMAIL();
       if (ownerEmail) {
         await resend.emails.send({
@@ -177,72 +149,44 @@ export default async function SuccessPage({ searchParams }: Props) {
     }
   }
 
-  // ── Success UI ────────────────────────────────────────────
   return (
-    <div className="flex min-h-[80vh] flex-col items-center justify-center bg-[#FFFBF5] px-6 py-16 text-center">
-      {/* Clears localStorage cart now that payment is done */}
+    <div className="flex min-h-[80vh] flex-col items-center justify-center bg-[#F8F5F0] px-6 py-16 text-center">
       <ClearCart />
       <div className="w-full max-w-md">
-        {/* Success icon */}
-        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
-          <svg
-            className="h-10 w-10 text-green-600"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
+        <div className="mx-auto mb-8 flex h-14 w-14 items-center justify-center border border-[#E2D9CE] bg-white">
+          <svg className="h-6 w-6 text-[#111111]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
 
-        <h1 className="mb-3 text-3xl font-extrabold text-[#1C1917]">
-          Payment Confirmed!
-        </h1>
-        <p className="mb-2 text-[#78716C]">
-          Thanks, {customerName}! Your order has been received.
-        </p>
-        <p className="mb-8 text-[#78716C]">
-          A receipt has been sent to <strong>{customerEmail}</strong>. We&apos;ll
-          reach out soon to arrange pickup or delivery.
+        <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">Order Confirmed</p>
+        <h1 className="mb-3 text-3xl font-light text-[#111111]">Payment received.</h1>
+        <p className="mb-1 text-sm text-[#6B6560]">Thanks, {customerName}. Your order is confirmed.</p>
+        <p className="mb-8 text-sm text-[#6B6560]">
+          Receipt sent to <span className="text-[#111111]">{customerEmail}</span>. We&apos;ll be in touch to arrange pickup or delivery.
         </p>
 
-        {/* Order summary */}
-        <div className="mb-8 overflow-hidden rounded-2xl border border-[#F0E8DC] bg-white text-left card-shadow">
-          <div className="border-b border-[#F0E8DC] bg-[#FFF7ED] px-5 py-3">
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#F97316]">
-              Order Summary
-            </p>
+        <div className="mb-8 border border-[#E2D9CE] bg-white text-left">
+          <div className="border-b border-[#E2D9CE] px-5 py-3">
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-[#9C9490]">Order Summary</p>
           </div>
           {lineItems.map((item) => (
-            <div key={item.id} className="flex justify-between border-b border-[#F0E8DC] px-5 py-3 last:border-0">
-              <span className="text-sm text-[#1C1917]">
-                {item.quantity}× {item.description}
-              </span>
-              <span className="text-sm font-semibold text-[#1C1917]">
-                ${((item.amount_total ?? 0) / 100).toFixed(2)}
-              </span>
+            <div key={item.id} className="flex justify-between border-b border-[#E2D9CE] px-5 py-3 last:border-0">
+              <span className="text-sm text-[#111111]">{item.quantity}× {item.description}</span>
+              <span className="text-sm text-[#111111]">${((item.amount_total ?? 0) / 100).toFixed(2)}</span>
             </div>
           ))}
-          <div className="flex justify-between bg-[#FDF8F2] px-5 py-3">
-            <span className="font-semibold text-[#1C1917]">Total Paid</span>
-            <span className="font-extrabold text-[#F97316]">${totalDollars}</span>
+          <div className="flex justify-between bg-[#F8F5F0] px-5 py-3">
+            <span className="text-sm font-medium text-[#111111]">Total Paid</span>
+            <span className="text-sm font-semibold text-[#111111]">${totalDollars}</span>
           </div>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <Link
-            href="/products"
-            className="rounded-md bg-[#F97316] px-6 py-3 text-sm font-semibold text-white hover:bg-[#EA580C]"
-          >
+          <Link href="/products" className="bg-[#111111] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#C8510A]">
             Shop Again
           </Link>
-          <Link
-            href="/"
-            className="rounded-md border border-[#E0D4C4] bg-white px-6 py-3 text-sm font-semibold text-[#1C1917] hover:border-[#F97316] hover:text-[#F97316]"
-          >
+          <Link href="/" className="border border-[#E2D9CE] bg-white px-6 py-3 text-sm font-medium text-[#111111] transition-colors hover:border-[#111111]">
             Back to Home
           </Link>
         </div>

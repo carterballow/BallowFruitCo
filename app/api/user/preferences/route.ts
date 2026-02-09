@@ -12,7 +12,6 @@ export async function GET() {
     .eq("user_id", user.id)
     .single();
 
-  // Return defaults if no preferences saved yet
   return NextResponse.json(data ?? {
     dietary_goals: [],
     allergies: [],

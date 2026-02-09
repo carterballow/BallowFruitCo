@@ -56,7 +56,6 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Desktop links */}
         <ul className="hidden items-center gap-8 md:flex">
           {links.map((link) => (
             <li key={link.href}>
@@ -70,7 +69,6 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* Right side */}
         <div className="hidden items-center gap-4 md:flex">
           <Link href="/order" className="relative p-1 text-[#6B6560] transition-colors hover:text-[#111111]" aria-label="Cart">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -110,7 +108,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile */}
         <div className="flex items-center gap-3 md:hidden">
           <Link href="/order" className="relative p-1 text-[#6B6560]">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -132,7 +129,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {menuOpen && (
         <div className="border-t border-[#E2D9CE] bg-[#F8F5F0] px-6 pb-6 md:hidden">
           <ul className="flex flex-col gap-4 pt-5">

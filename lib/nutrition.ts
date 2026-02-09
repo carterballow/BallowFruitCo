@@ -1,12 +1,8 @@
-// Static fruit data for the planner's shelf-life scheduling and nutrition display.
-// urgencyScore: 1-10. Higher = must be used sooner in the week.
-// shelfLifeDays: realistic refrigerated shelf life from purchase date.
-
 export type FruitData = {
   id: string;
   name: string;
   shelfLifeDays: number;
-  urgencyScore: number;   // drives the planner algorithm — avocados always go first
+  urgencyScore: number;
   caloriesPer100g: number;
   fiberG: number;
   sugarG: number;
@@ -67,8 +63,8 @@ export const FRUIT_DATA: Record<string, FruitData> = {
   avocados: {
     id: "avocados",
     name: "Avocados",
-    shelfLifeDays: 5,   // ripened avocados — use fast
-    urgencyScore: 10,   // highest urgency, always scheduled days 1-3
+    shelfLifeDays: 5,
+    urgencyScore: 10,
     caloriesPer100g: 160,
     fiberG: 6.7,
     sugarG: 0.7,
@@ -76,8 +72,6 @@ export const FRUIT_DATA: Record<string, FruitData> = {
   },
 };
 
-// Returns a human-readable shelf-life warning for the planner UI.
-// e.g. "Use within 5 days" for avocados
 export function getShelfLifeLabel(fruitId: string): string {
   const data = FRUIT_DATA[fruitId];
   if (!data) return "";

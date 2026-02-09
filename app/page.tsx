@@ -30,7 +30,6 @@ export default function HomePage() {
   return (
     <div className="bg-[#F8F5F0]">
 
-      {/* ── Hero ──────────────────────────────────────────────── */}
       <section className="border-b border-[#E2D9CE]">
         <div className="mx-auto max-w-7xl px-6 py-28 sm:py-40">
           <div className="max-w-3xl">
@@ -63,7 +62,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── What's in season ──────────────────────────────────── */}
       <section className="border-b border-[#E2D9CE]">
         <div className="mx-auto max-w-7xl px-6 py-20">
           <ScrollReveal>
@@ -113,7 +111,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Why direct ────────────────────────────────────────── */}
       <section className="border-b border-[#E2D9CE]">
         <div className="mx-auto max-w-7xl px-6 py-20">
           <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
@@ -151,7 +148,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Story strip ───────────────────────────────────────── */}
       <section className="border-b border-[#E2D9CE] bg-[#111111]">
         <div className="mx-auto max-w-7xl px-6 py-20">
           <ScrollReveal>
@@ -172,7 +168,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── CTA ───────────────────────────────────────────────── */}
       <section>
         <div className="mx-auto max-w-7xl px-6 py-20 text-center">
           <ScrollReveal>

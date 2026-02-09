@@ -15,7 +15,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 
-  // Supabase sends a confirmation email automatically.
-  // The user needs to click it before they can log in.
   return NextResponse.json({ success: true });
 }
