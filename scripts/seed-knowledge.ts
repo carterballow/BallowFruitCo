@@ -17,10 +17,11 @@ const supabase = createClient(
 );
 
 async function embedText(text: string): Promise<number[]> {
-  const { pipeline } = await import("@xenova/transformers");
-  const pipe = await (pipeline as any)("feature-extraction", "Xenova/bge-base-en-v1.5");
-  const output = await pipe(text, { pooling: "mean", normalize: true });
-  return Array.from(output.data) as number[];
+  const { GoogleGenerativeAI } = await import("@google/generative-ai");
+  const client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+  const model = client.getGenerativeModel({ model: "gemini-embedding-001" });
+  const result = await model.embedContent(text);
+  return result.embedding.values;
 }
 
 const produceKnowledge = [

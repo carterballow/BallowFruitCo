@@ -12,7 +12,7 @@ function getClient(): GoogleGenerativeAI {
 }
 
 export async function embedText(text: string): Promise<number[]> {
-  const model = getClient().getGenerativeModel({ model: "text-embedding-004" });
+  const model = getClient().getGenerativeModel({ model: "gemini-embedding-001" });
   const result = await model.embedContent(text);
   return result.embedding.values;
 }
