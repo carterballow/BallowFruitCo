@@ -1,15 +1,18 @@
-let extractor: Awaited<ReturnType<typeof import("@xenova/transformers").pipeline>> | null = null;
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-async function getExtractor() {
-  if (!extractor) {
-    const { pipeline } = await import("@xenova/transformers");
-    extractor = await pipeline("feature-extraction", "Xenova/bge-base-en-v1.5");
+let client: GoogleGenerativeAI | null = null;
+
+function getClient(): GoogleGenerativeAI {
+  if (!client) {
+    const key = process.env.GEMINI_API_KEY;
+    if (!key) throw new Error("Missing GEMINI_API_KEY");
+    client = new GoogleGenerativeAI(key);
   }
-  return extractor;
+  return client;
 }
 
 export async function embedText(text: string): Promise<number[]> {
-  const pipe = await getExtractor();
-  const output = await (pipe as any)(text, { pooling: "mean", normalize: true });
-  return Array.from(output.data) as number[];
+  const model = getClient().getGenerativeModel({ model: "text-embedding-004" });
+  const result = await model.embedContent(text);
+  return result.embedding.values;
 }
