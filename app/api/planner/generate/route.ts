@@ -7,9 +7,11 @@ export async function POST(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 
-  const { cartItems, weekStart } = await req.json() as {
+  const { cartItems, weekStart, prefs: bodyPrefs, seed } = await req.json() as {
     cartItems: CartItem[];
     weekStart: string;
+    prefs?: UserPrefs;
+    seed?: number;
   };
 
   if (!cartItems?.length) {
@@ -22,7 +24,7 @@ export async function POST(req: NextRequest) {
     .eq("user_id", user.id)
     .single();
 
-  const prefs: UserPrefs = prefsData ?? {
+  const prefs: UserPrefs = bodyPrefs ?? prefsData ?? {
     dietary_goals: [],
     allergies: [],
     meals_per_day: 3,
@@ -59,7 +61,8 @@ export async function POST(req: NextRequest) {
     cartItems,
     prefs,
     pastRatings,
-    new Date(weekStart)
+    new Date(weekStart),
+    seed
   );
 
   const { data: savedPlan, error: saveError } = await supabase

@@ -1,16 +1,5 @@
 "use client";
 
-/**
- * /planner — AI Weekly Recipe Planner
- *
- * 1. Auth gate: if you're not logged in, you get redirected to the login page.
- * 2. Cart summary: shows what fruits you have + how urgent each one is.
- * 3. Preferences panel: dietary goals, allergies, meals per day, skill level.
- * 4. Generate button: sends your cart + prefs to the AI planner API.
- * 5. Plan display: shows a 7-day grid of meals with fruit tags.
- * 6. Star rating: you can rate each recipe 1-5 stars.
- */
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -18,7 +7,6 @@ import { useCart } from "@/components/cart-context";
 import { FRUIT_DATA, getShelfLifeLabel } from "@/lib/nutrition";
 import { getSupabaseBrowser } from "@/lib/supabase-browser";
 
-// ── Types ─────────────────────────────────────────────────────────────────────
 
 type DayMeal = {
   meal_type: string;
@@ -49,7 +37,6 @@ type WasteAlert = {
   tip: string;
 };
 
-// ── Star Rating ───────────────────────────────────────────────────────────────
 
 function StarRating({
   recipeId,
@@ -99,7 +86,6 @@ function StarRating({
   );
 }
 
-// ── Urgency Badge ─────────────────────────────────────────────────────────────
 
 function UrgencyBadge({ fruitId }: { fruitId: string }) {
   const data = FRUIT_DATA[fruitId];
@@ -118,7 +104,6 @@ function UrgencyBadge({ fruitId }: { fruitId: string }) {
   );
 }
 
-// ── Tag Chip ──────────────────────────────────────────────────────────────────
 
 function Tag({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
@@ -135,7 +120,6 @@ function Tag({ label, active, onClick }: { label: string; active: boolean; onCli
   );
 }
 
-// ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function PlannerPage() {
   const router = useRouter();
@@ -214,6 +198,8 @@ export default function PlannerPage() {
         body: JSON.stringify({
           cartItems: cartItems.map((i) => ({ id: i.id, name: i.name, quantity: i.quantity })),
           weekStart: weekStart.toISOString().split("T")[0],
+          prefs: { dietary_goals: dietaryGoals, allergies, meals_per_day: mealsPerDay, skill_level: skillLevel },
+          seed: Math.random(),
         }),
       });
       const data = await res.json();

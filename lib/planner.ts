@@ -72,7 +72,8 @@ export async function generateWeeklyPlan(
   cartItems: CartItem[],
   prefs: UserPrefs,
   pastRatings: PastRating[],
-  weekStart: Date
+  weekStart: Date,
+  seed = Math.random()
 ): Promise<WeeklyPlan> {
 
   const urgentFruits = cartItems
@@ -129,7 +130,8 @@ export async function generateWeeklyPlan(
         (sum, fid) => sum + (nutritionTagBoosts[fid] ?? 0),
         0
       );
-      return { ...r, score: r.similarity + tagBoost + nutritionBoost };
+      const jitter = (Math.abs(Math.sin(seed * 1000 + r.id.charCodeAt(0))) * 0.08);
+      return { ...r, score: r.similarity + tagBoost + nutritionBoost + jitter };
     })
     .sort((a, b) => b.score - a.score);
 
