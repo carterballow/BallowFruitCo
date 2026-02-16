@@ -110,8 +110,13 @@ export async function generateWeeklyPlan(
 
   const fruitIds = cartItems.map((i) => i.id);
 
-  const { recipes: candidates, produceKnowledge, nutritionKnowledge, contextSummary } =
-    await multiStoreRetrieval(contextQuery, fruitIds, prefs.allergies, 25);
+  const { recipes: allCandidates, produceKnowledge, nutritionKnowledge, contextSummary } =
+    await multiStoreRetrieval(contextQuery, fruitIds, prefs.allergies, 40);
+
+  const cartFruitSet = new Set(fruitIds);
+  const candidates = allCandidates.filter((r) =>
+    r.fruit_tags.every((tag) => cartFruitSet.has(tag))
+  );
 
   const nutritionTagBoosts: Record<string, number> = {};
   for (const chunk of nutritionKnowledge) {
