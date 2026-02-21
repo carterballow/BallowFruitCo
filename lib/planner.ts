@@ -145,7 +145,7 @@ async function buildGeminiPlan(
   nutritionKnowledge: NutritionChunk[],
   urgentFruits: { fruitId: string; name: string; urgencyScore: number; latestDay: number }[],
   weekStart: Date
-): Promise<{ days: DayPlan[]; summary: string }> {
+): Promise<{ days: DayPlan[]; summary: string; groceryList: GroceryItem[] }> {
   const mealTypes = getMealTypes(prefs.meals_per_day);
   const days = Array.from({ length: 7 }, (_, i) => ({
     day: i + 1,
@@ -258,8 +258,14 @@ Return ONLY valid JSON. No markdown, no explanation, no code blocks. Just raw JS
       ]
     }
   ],
-  "summary": "2-3 sentences: warm intro mentioning their specific goals, which fruit to use first and why, and what makes this plan work for them personally."
-}`;
+  "summary": "2-3 sentences: warm intro mentioning their specific goals, which fruit to use first and why, and what makes this plan work for them personally.",
+  "grocery_list": [
+    {"name": "ingredient name", "reason": "which recipe(s) need it and why", "urgency": "this week"},
+    {"name": "ingredient name", "reason": "which recipe(s) need it and why", "urgency": "optional"}
+  ]
+}
+
+For grocery_list: list every non-fruit ingredient actually required by the planned recipes. Group duplicates — if 4 recipes use olive oil, list it once with a combined reason. Exclude salt, pepper, and water (assume pantry staples). Mark urgency "this week" if needed for multiple recipes or for early-week meals, "optional" if only needed for one later-week recipe. Aim for 10-16 items covering the full week.`;
 
   const raw = await generatePlanText(prompt);
   const jsonStr = raw.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/i, "").trim();
@@ -287,7 +293,17 @@ Return ONLY valid JSON. No markdown, no explanation, no code blocks. Just raw JS
     }),
   }));
 
-  return { days: planDays, summary: parsed.summary ?? "" };
+  const groceryList: GroceryItem[] = (parsed.grocery_list ?? []).map((item: {
+    name: string;
+    reason: string;
+    urgency?: string;
+  }) => ({
+    name: item.name,
+    reason: item.reason,
+    urgency: (item.urgency === "optional" ? "optional" : "this week") as "this week" | "optional",
+  }));
+
+  return { days: planDays, summary: parsed.summary ?? "", groceryList };
 }
 
 function fallbackPlan(
@@ -398,6 +414,7 @@ export async function generateWeeklyPlan(
 
   let planDays: DayPlan[];
   let summary = "";
+  let groceryList: GroceryItem[] = [];
 
   try {
     const result = await buildGeminiPlan(
@@ -412,17 +429,18 @@ export async function generateWeeklyPlan(
     );
     planDays = result.days;
     summary = result.summary;
+    groceryList = result.groceryList;
   } catch (err) {
     console.error("Gemini planning failed, using fallback:", err);
     planDays = fallbackPlan(candidates, prefs, urgentFruits, weekStart, seed);
+    const allRecipeTitles = planDays.flatMap((d) => d.meals.map((m) => m.recipe_title));
+    groceryList = generateGroceryList(allRecipeTitles, fruitIds, produceKnowledge);
 
     const urgentName = urgentFruits[0]?.name ?? cartItems[0]?.name ?? "your fruit";
     const goalText = prefs.dietary_goals.length ? prefs.dietary_goals.join(" and ") : "balanced";
     summary = `Your 7-day ${goalText} plan is ready. Start with your ${urgentName} early this week — use them in the first few days while they're at peak freshness. The rest of the week is scheduled to minimize waste.`;
   }
 
-  const allRecipeTitles = planDays.flatMap((d) => d.meals.map((m) => m.recipe_title));
-  const groceryList = generateGroceryList(allRecipeTitles, fruitIds, produceKnowledge);
   const shelfLifeMap = buildShelfLifeMap();
   const wasteAlerts = generateWasteAlerts(cartItems, planDays, shelfLifeMap, produceKnowledge);
 
