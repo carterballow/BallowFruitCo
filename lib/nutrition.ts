@@ -3,6 +3,7 @@ export type FruitData = {
   name: string;
   shelfLifeDays: number;
   urgencyScore: number;
+  slotsPerBag: number;
   caloriesPer100g: number;
   fiberG: number;
   sugarG: number;
@@ -15,6 +16,7 @@ export const FRUIT_DATA: Record<string, FruitData> = {
     name: "Naval Oranges",
     shelfLifeDays: 14,
     urgencyScore: 3,
+    slotsPerBag: 5,
     caloriesPer100g: 47,
     fiberG: 2.4,
     sugarG: 9.4,
@@ -25,6 +27,7 @@ export const FRUIT_DATA: Record<string, FruitData> = {
     name: "Blood Oranges",
     shelfLifeDays: 14,
     urgencyScore: 3,
+    slotsPerBag: 5,
     caloriesPer100g: 50,
     fiberG: 2.2,
     sugarG: 8.6,
@@ -35,6 +38,7 @@ export const FRUIT_DATA: Record<string, FruitData> = {
     name: "Lemons",
     shelfLifeDays: 21,
     urgencyScore: 2,
+    slotsPerBag: 3,
     caloriesPer100g: 29,
     fiberG: 2.8,
     sugarG: 2.5,
@@ -45,6 +49,7 @@ export const FRUIT_DATA: Record<string, FruitData> = {
     name: "Limes",
     shelfLifeDays: 21,
     urgencyScore: 2,
+    slotsPerBag: 3,
     caloriesPer100g: 30,
     fiberG: 2.8,
     sugarG: 1.7,
@@ -55,6 +60,7 @@ export const FRUIT_DATA: Record<string, FruitData> = {
     name: "Pomegranates",
     shelfLifeDays: 30,
     urgencyScore: 1,
+    slotsPerBag: 3,
     caloriesPer100g: 83,
     fiberG: 4.0,
     sugarG: 13.7,
@@ -65,6 +71,7 @@ export const FRUIT_DATA: Record<string, FruitData> = {
     name: "Avocados",
     shelfLifeDays: 5,
     urgencyScore: 10,
+    slotsPerBag: 4,
     caloriesPer100g: 160,
     fiberG: 6.7,
     sugarG: 0.7,

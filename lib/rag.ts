@@ -122,6 +122,27 @@ export async function retrieveNutritionKnowledge(
   return (data as NutritionChunk[]) ?? [];
 }
 
+export async function retrieveGeneralRecipes(
+  queryText: string,
+  excludeTags: string[],
+  topK = 30
+): Promise<RecipeMatch[]> {
+  const queryEmbedding = await embedText(queryText);
+  const supabase = getSupabase();
+
+  const { data, error } = await supabase.rpc("match_general_recipes", {
+    query_embedding: queryEmbedding,
+    exclude_tags: excludeTags.length > 0 ? excludeTags : ["__no_exclusions__"],
+    match_count: topK,
+  });
+
+  if (error) {
+    console.warn("General recipe retrieval failed:", error.message);
+    return [];
+  }
+  return (data as RecipeMatch[]) ?? [];
+}
+
 export async function multiStoreRetrieval(
   queryText: string,
   fruitIds: string[],

@@ -1,6 +1,7 @@
 import { FRUIT_DATA } from "./nutrition";
 import {
   multiStoreRetrieval,
+  retrieveGeneralRecipes,
   buildContextQuery,
   generateGroceryList,
   generateWasteAlerts,
@@ -138,6 +139,9 @@ function applyHardFilters(candidates: RecipeMatch[], prefs: UserPrefs): RecipeMa
 
 async function buildGeminiPlan(
   candidates: RecipeMatch[],
+  generalCandidates: RecipeMatch[],
+  fruitSlotCount: number,
+  generalSlotCount: number,
   cartItems: CartItem[],
   prefs: UserPrefs,
   pastRatings: PastRating[],
@@ -156,16 +160,23 @@ async function buildGeminiPlan(
   const likedTitles = pastRatings
     .filter((r) => r.rating >= 4)
     .map((r) => {
-      const match = candidates.find((c) => c.id === r.recipe_id);
+      const match = [...candidates, ...generalCandidates].find((c) => c.id === r.recipe_id);
       return match ? match.title : null;
     })
     .filter(Boolean);
 
   const available = candidates.filter((r) => !dislikedIds.has(r.id));
+  const availableGeneral = generalCandidates.filter((r) => !dislikedIds.has(r.id));
 
   const recipeList = available
     .map((r) =>
-      `ID:${r.id} | "${r.title}" | meals:${r.meal_type.join("/")} | difficulty:${r.difficulty} | tags:${r.dietary_tags.join(",")} | fruit:${r.fruit_tags.join(",")}`
+      `[FRUIT] ID:${r.id} | "${r.title}" | meals:${r.meal_type.join("/")} | difficulty:${r.difficulty} | tags:${r.dietary_tags.join(",")} | fruit:${r.fruit_tags.join(",")}`
+    )
+    .join("\n");
+
+  const generalRecipeList = availableGeneral
+    .map((r) =>
+      `[GENERAL] ID:${r.id} | "${r.title}" | meals:${r.meal_type.join("/")} | difficulty:${r.difficulty} | tags:${r.dietary_tags.join(",")}`
     )
     .join("\n");
 
@@ -206,6 +217,8 @@ async function buildGeminiPlan(
     advanced: "This person is an advanced cook. Include intermediate and complex recipes to keep things interesting.",
   };
 
+  const totalSlots = prefs.meals_per_day * 7;
+
   const prompt = `You are an expert meal planning AI for Ballow Fruit Co., a family farm in Encinitas, CA. Your job is to create a genuinely personalized, intelligent 7-day meal plan.
 
 == CUSTOMER CART ==
@@ -227,8 +240,18 @@ ${produceText || "No produce data."}
 == NUTRITION CONTEXT ==
 ${nutritionText || "No nutrition data."}
 
-== AVAILABLE RECIPES ==
-${recipeList}
+== SLOT ALLOCATION ==
+Total meal slots this week: ${totalSlots}
+Fruit-based recipe slots (based on quantity purchased): ${fruitSlotCount}
+General healthy recipe slots (fill rest of week based on goals): ${generalSlotCount}
+
+This means: use [FRUIT] recipes for exactly ${fruitSlotCount} meals across the week, and [GENERAL] recipes for exactly ${generalSlotCount} meals. Do not exceed ${fruitSlotCount} fruit recipes. Spread fruit meals across the week — don't cluster all fruit meals at the start.
+
+== FRUIT RECIPES (use for ${fruitSlotCount} meal slots) ==
+${recipeList || "No fruit recipes available."}
+
+== GENERAL RECIPES (use for ${generalSlotCount} meal slots) ==
+${generalRecipeList || "No general recipes available."}
 
 == PLANNING RULES ==
 1. NEVER repeat the same recipe_id in the plan.
@@ -240,7 +263,8 @@ ${goalRules || "Balance variety across all dietary styles."}
 6. Skill level: ${skillInstructions[prefs.skill_level] ?? "Match skill level appropriately."}
 7. If dietary goals include 'high-protein', ensure at least 1 high-protein meal per day.
 8. Snacks and drinks can fill slots if no lunch/dinner recipe fits — only use if meal_type list includes 'snack' or 'drink' for that slot type.
-9. Always fill all ${prefs.meals_per_day * 7} meal slots.
+9. Always fill all ${totalSlots} meal slots.
+10. Honor the slot allocation: exactly ${fruitSlotCount} [FRUIT] recipes and ${generalSlotCount} [GENERAL] recipes.
 
 == WEEK DATES ==
 ${days.map((d) => `Day ${d.day}: ${d.date}`).join("\n")}
@@ -272,7 +296,7 @@ For grocery_list: list every non-fruit ingredient actually required by the plann
 
   const parsed = JSON.parse(jsonStr);
 
-  const recipeMap = new Map(available.map((r) => [r.id, r]));
+  const recipeMap = new Map([...available, ...availableGeneral].map((r) => [r.id, r]));
 
   const planDays: DayPlan[] = (parsed.days as Array<{
     day: number;
@@ -402,8 +426,22 @@ export async function generateWeeklyPlan(
     inventoryAlerts
   );
 
-  const { recipes: allCandidates, produceKnowledge, nutritionKnowledge, contextSummary } =
-    await multiStoreRetrieval(contextQuery, fruitIds, [], 50);
+  const totalSlots = prefs.meals_per_day * 7;
+
+  const rawFruitBudget = cartItems.reduce((sum, item) => {
+    const data = FRUIT_DATA[item.id];
+    return sum + (data?.slotsPerBag ?? 4) * item.quantity;
+  }, 0);
+  const fruitSlotCount = Math.min(rawFruitBudget, totalSlots - Math.floor(totalSlots * 0.3));
+  const generalSlotCount = totalSlots - fruitSlotCount;
+
+  const [
+    { recipes: allCandidates, produceKnowledge, nutritionKnowledge, contextSummary },
+    generalCandidates,
+  ] = await Promise.all([
+    multiStoreRetrieval(contextQuery, fruitIds, [], 50),
+    retrieveGeneralRecipes(contextQuery, [], Math.max(generalSlotCount * 3, 30)),
+  ]);
 
   const cartFruitSet = new Set(fruitIds);
   const cartFiltered = allCandidates.filter((r) =>
@@ -411,6 +449,7 @@ export async function generateWeeklyPlan(
   );
 
   const candidates = applyHardFilters(cartFiltered, prefs);
+  const filteredGeneral = applyHardFilters(generalCandidates, prefs);
 
   let planDays: DayPlan[];
   let summary = "";
@@ -419,6 +458,9 @@ export async function generateWeeklyPlan(
   try {
     const result = await buildGeminiPlan(
       candidates,
+      filteredGeneral,
+      fruitSlotCount,
+      generalSlotCount,
       cartItems,
       prefs,
       pastRatings,
@@ -432,7 +474,7 @@ export async function generateWeeklyPlan(
     groceryList = result.groceryList;
   } catch (err) {
     console.error("Gemini planning failed, using fallback:", err);
-    planDays = fallbackPlan(candidates, prefs, urgentFruits, weekStart, seed);
+    planDays = fallbackPlan([...candidates, ...filteredGeneral], prefs, urgentFruits, weekStart, seed);
     const allRecipeTitles = planDays.flatMap((d) => d.meals.map((m) => m.recipe_title));
     groceryList = generateGroceryList(allRecipeTitles, fruitIds, produceKnowledge);
 
