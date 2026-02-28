@@ -386,7 +386,7 @@ export default function PlannerPage() {
 
           {generating && (
             <p className="text-xs text-[#9C9490]">
-              Matching recipes to your cart — this takes 5–15 seconds.
+              Matching recipes to your cart — this takes up to 1 minute.
             </p>
           )}
 
