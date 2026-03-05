@@ -65,7 +65,7 @@ export default function AboutPage() {
                       Ballow Fruit Co. started in 2016 not as a business plan,
                       but as a realization. We had naval oranges, blood
                       oranges, lemons, limes, pomegranates, avocados — and, fun fact,
-                      a few bananas and figs — growing in our yard.
+                      a few bananas and figs growing in our yard.
                       In fact, we had so much fruit that our yard was caked with dead 
                       fruit year round with so much going to waste. So, the neighborhood started 
                       getting bags on their doorsteps. Then a local stand. Then word got around.

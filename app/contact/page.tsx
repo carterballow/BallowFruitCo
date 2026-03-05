@@ -10,7 +10,7 @@ export default function ContactPage() {
             <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">Reach Out</p>
             <h1 className="text-4xl font-light tracking-tight text-[#111111] sm:text-5xl">Contact</h1>
             <p className="mt-3 text-[#6B6560]">
-              Questions about availability, quantities, or delivery — we reply to every message personally.
+              Questions about availability, quantities, or delivery? We reply to every email personally.
             </p>
           </ScrollReveal>
         </div>

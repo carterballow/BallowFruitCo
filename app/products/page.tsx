@@ -13,10 +13,10 @@ const products = [
     price: 800,
     priceDisplay: "$8",
     unit: "per 5 lb bag",
-    tagline: "Bright, sweet, and seedless",
+    tagline: "Bright, sweet, seedless!",
     description:
-      "Our naval oranges are grown in the coastal Encinitas climate — warm days, cool nights, and ocean air that makes San Diego County one of the best citrus regions in the country. No seeds, easy to peel, sweet all the way through. Picked when they're actually ready.",
-    flavor: "Sweet, mild, classic orange — zero seeds",
+      "Our naval oranges are grown in the coastal Encinitas climate. No seeds, easy to peel, sweet, and picked when they're actually ready. These are the most popular of our selection so order quickly.",
+    flavor: "Sweet, mild, classic orange with zero seeds",
     season: "November – April",
     inSeason: true,
     image: "/naval-orange.png",
@@ -30,10 +30,10 @@ const products = [
     price: 1000,
     priceDisplay: "$10",
     unit: "per 5 lb bag",
-    tagline: "Deep ruby, complex flavor",
+    tagline: "Ruby, tart, complex flavor!",
     description:
-      "Slice one open and the flesh is a deep crimson red — caused by anthocyanins, the same antioxidant found in pomegranates and blueberries. The flavor is more complex than a navel: sweet, slightly tart, with a distinct berry undertone. They go fast every season.",
-    flavor: "Sweet-tart with a subtle raspberry note",
+      "These are a fan favorite, when you open then, the flesh is a deep crimson red caused by anthocyanins. They have the same antioxidant found in pomegranates and blueberries making them very healthy. The flavor is more complex than a navel too, being sweet, slightly tart, with a distinct berry undertone.",
+    flavor: "Sweet/tart, subtle raspberry tone, zesty.",
     season: "December – March",
     inSeason: true,
     image: "/bloodorange.png",
@@ -47,9 +47,9 @@ const products = [
     price: 800,
     priceDisplay: "$8",
     unit: "per 5 lb bag",
-    tagline: "Bright, fragrant, incredibly juicy",
+    tagline: "Bright, juicy, great for cooking!",
     description:
-      "Eureka lemons grown in the coastal Encinitas air develop a thin, fragrant rind and exceptional juice yield. These aren't the waxy, thick-skinned lemons from the grocery store. Ours are picked fresh and often still warm from the sun.",
+      "Lemons grown in the coastal Encinitas air develop a thin, fragrant casing and very flavorful juice. These aren't the waxy, thick lemons from the grocery store, because ours are picked fresh and still warm from the sun.",
     flavor: "Tart, bright, intensely citrusy with a floral aroma",
     season: "Year-round, peak in winter",
     inSeason: true,
@@ -64,9 +64,9 @@ const products = [
     price: 800,
     priceDisplay: "$8",
     unit: "per 5 lb bag",
-    tagline: "Small, potent, deeply aromatic",
+    tagline: "Small, potent, aromatic!",
     description:
-      "Persian limes grown without pesticides — noticeably more aromatic than store-bought. Great in drinks, salsas, marinades, and desserts. The zest alone is worth ordering for.",
+      "Limes grown without pesticides are more noticeably more aromatic than store bought ones. Great for drinks, salsas, marinades, and desserts.",
     flavor: "Tangy, slightly floral, clean acidity",
     season: "Year-round, peak in summer",
     inSeason: true,
@@ -81,10 +81,10 @@ const products = [
     price: 1200,
     priceDisplay: "$12",
     unit: "per bag of 4",
-    tagline: "Jewel-like arils, bold flavor",
+    tagline: "Crunchy, bold, fresh",
     description:
-      "We grow Wonderful variety pomegranates — the deepest red arils with the best balance of sweet and tart. Available only in fall, they're one of the most labor-intensive fruits to harvest and one of the most rewarding to eat.",
-    flavor: "Bold, sweet-tart, rich with wine-like complexity",
+      "We grow a variety pomegranates ranging from the deep red sweet pomegranites to light ruby tart ones. Available only in fall, they're one of the most labor intensive fruits to harvest and one of the more rewarding to eat.",
+    flavor: "Bold, sweet/tart, wine like complexity",
     season: "September – November",
     inSeason: false,
     image: "/pomegranite.png",
@@ -98,9 +98,9 @@ const products = [
     price: 1200,
     priceDisplay: "$12",
     unit: "per bag of 6",
-    tagline: "Buttery Hass, tree-ripened",
+    tagline: "Hass, ripe, creamy!",
     description:
-      "San Diego County is one of the premier avocado-growing regions in the world, and Encinitas is right in the heart of it. Our Hass avocados are left on the tree until they're ready — richer, nuttier flavor than anything that ripened in a shipping container.",
+      "San Diego County is one of the premier avocado growing regions in the entire world. Our Hass avocados are left on the tree until they're ready, making them richer, nuttier, and creamier than anything in a shipping container.",
     flavor: "Rich, buttery, nutty with a creamy texture",
     season: "April – September",
     inSeason: false,
@@ -268,7 +268,7 @@ export default function ProductsPage() {
             <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">The Catalog</p>
             <h1 className="text-4xl font-light tracking-tight text-[#111111] sm:text-5xl">Our Fruit</h1>
             <p className="mt-3 text-[#6B6560]">
-              Out-of-season items are grayed out — check back when they&apos;re available.
+              Out of season items are grayed out. Check back when they&apos;re available.
             </p>
           </ScrollReveal>
         </div>

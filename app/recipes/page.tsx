@@ -7,7 +7,7 @@ const recipes = [
     difficulty: "Easy",
     fruit: "Blood Oranges",
     description:
-      "Slice blood oranges thin, fan over arugula, add shaved fennel, drizzle with olive oil and a pinch of flaky salt. The visual alone is worth it.",
+      "Slice blood oranges thin, fan over arugula, add shaved fennel, drizzle with olive oil, add a pinch of flaky salt.",
     ingredients: [
       "3 blood oranges, sliced thin",
       "2 cups arugula",
@@ -22,7 +22,7 @@ const recipes = [
     difficulty: "Easy",
     fruit: "Naval Oranges",
     description:
-      "Fresh-squeezed naval orange juice, Dijon, sherry vinegar, and olive oil. Bright and citrusy — transforms any salad or grain bowl.",
+      "Fresh naval orange juice, dijon, sherry vinegar, and olive oil. Bright and citrusy that transforms any salad or grain bowl.",
     ingredients: [
       "Juice of 2 naval oranges",
       "1 tsp Dijon mustard",
@@ -37,13 +37,13 @@ const recipes = [
     difficulty: "Easy",
     fruit: "Avocados + Lemons",
     description:
-      "Smash ripe Hass avocado on thick sourdough, finish with a squeeze of fresh lemon and flaky salt. The lemon cuts through the richness and lifts the whole thing.",
+      "Smash ripe Hass avocado on thick sourdough, finish with a squeeze of fresh lemon and flaky salt. Optional: add fried egg on top with black pepper.",
     ingredients: [
       "1 ripe avocado",
       "2 slices sourdough, toasted",
       "Half a lemon",
       "Flaky sea salt",
-      "Optional: red pepper flakes, soft-boiled egg",
+      "Optional: black pepper flakes, fried egg",
     ],
   },
   {
@@ -65,7 +65,7 @@ const recipes = [
     difficulty: "Easy",
     fruit: "Blood Oranges",
     description:
-      "Juice blood oranges, thin with water, sweeten lightly. The color is stunning — deep ruby red. Serve over ice with a pinch of tajín.",
+      "Juice blood oranges, thin with water, sweeten lightly. Serve over ice with a pinch of tajín.",
     ingredients: [
       "Juice of 6 blood oranges",
       "3 cups cold water",
@@ -79,7 +79,7 @@ const recipes = [
     difficulty: "Intermediate",
     fruit: "Lemons",
     description:
-      "Salt-cured lemons are a Moroccan pantry staple. One jar lasts months and elevates braises, pasta, and dressings with deep citrus intensity.",
+      "Saltly lemons are a Moroccan pantry staple. One jar lasts months and elevates braises, pasta, and dressings with deep citrus intensity.",
     ingredients: [
       "8 lemons, scrubbed",
       "½ cup kosher salt",
@@ -98,7 +98,7 @@ export default function RecipesPage() {
             <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">In the Kitchen</p>
             <h1 className="text-4xl font-light tracking-tight text-[#111111] sm:text-5xl">Recipe Ideas</h1>
             <p className="mt-3 max-w-xl text-[#6B6560]">
-              Simple ways to use what you&apos;ve ordered. No fancy technique — just fresh ingredients used well.
+              Simple ways to use what you&apos;ve ordered. No experience needed, just some fresh ingredients..
             </p>
           </ScrollReveal>
         </div>

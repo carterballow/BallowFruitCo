@@ -236,20 +236,18 @@ export default function PlannerPage() {
   return (
     <div className="bg-[#F8F5F0] min-h-screen">
 
-      {/* Page header */}
+      {}
       <div className="border-b border-[#E2D9CE]">
         <div className="mx-auto max-w-4xl px-6 py-12">
           <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">AI Planner</p>
           <h1 className="text-4xl font-light tracking-tight text-[#111111]">Weekly Meal Plan</h1>
           <p className="mt-2 text-[#6B6560]">
-            Your fruit cart, turned into a personalized 7-day recipe plan.
+            Your fruit cart turned into a personalized 7 day recipe plan.
           </p>
         </div>
       </div>
 
       <div className="mx-auto max-w-4xl px-6 py-10 space-y-8">
-
-        {/* ── Cart Summary ─────────────────────────────────────────────────── */}
         <section className="border border-[#E2D9CE] bg-white">
           <div className="border-b border-[#E2D9CE] px-6 py-4">
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-[#9C9490]">Your Cart</p>
@@ -278,9 +276,6 @@ export default function PlannerPage() {
                     <UrgencyBadge fruitId={item.id} />
                   </div>
                 ))}
-                <p className="pt-3 text-xs text-[#9C9490]">
-                  Avocados are always scheduled to days 1–3. They go fast.
-                </p>
               </div>
             )}
           </div>
@@ -380,13 +375,13 @@ export default function PlannerPage() {
             ) : plan ? (
               "Regenerate Plan"
             ) : (
-              "Generate My 7-Day Plan"
+              "Generate My 7 Day Plan"
             )}
           </button>
 
           {generating && (
             <p className="text-xs text-[#9C9490]">
-              Matching recipes to your cart — this takes up to 1 minute.
+              This will take up to 1 minute.
             </p>
           )}
 
