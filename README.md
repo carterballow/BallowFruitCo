@@ -1,17 +1,17 @@
 # Ballow Fruit Co.
 
-Direct-to-consumer storefront for a family fruit farm in Encinitas, CA. Built from scratch as a full-stack web project.
+Direct->consumer storefront for a family fruit farm in Encinitas, CA. Built from scratch as a full-stack web project.
 
 ## What it does
 
 - Browse and purchase fresh fruit (naval oranges, blood oranges, lemons, limes, pomegranates, avocados)
 - Checkout via Stripe with email receipts through Resend
 - Create an account and log in with Supabase Auth
-- Generate a personalized 7-day meal plan based on what's in your cart, powered by Gemini AI and a vector-embedded recipe database
+- Generate a personalized 7 day meal plan based on what's in your cart, powered by Gemini AI and a vector-embedded recipe database
 
 ## Stack
 
-- **Framework:** Next.js 16 (App Router)
+- **Framework:** Next.js 16
 - **Database & Auth:** Supabase (Postgres + pgvector + Row Level Security)
 - **Payments:** Stripe
 - **Email:** Resend
@@ -47,7 +47,7 @@ NEXT_PUBLIC_URL=http://localhost:3000
 npm run dev
 ```
 
-4. (Optional) Re-seed the recipe database:
+4. Re seed the recipe database:
 
 ```bash
 npx ts-node --esm scripts/embed-recipes.ts
