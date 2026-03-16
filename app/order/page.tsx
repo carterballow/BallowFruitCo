@@ -5,39 +5,57 @@ import Link from "next/link";
 import { useCart } from "@/components/cart-context";
 
 export default function OrderPage() {
-  const { items, removeItem, updateQty, totalCents } = useCart();
+  const { items, removeItem, updateQty, totalCents, clearCart } = useCart();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
   const totalDollars = (totalCents / 100).toFixed(2);
 
-  const handleCheckout = async () => {
+  const handleSubmit = async () => {
     if (!name.trim() || !email.trim()) {
-      setError("Please enter your name and email before checking out.");
+      setError("Please enter your name and email.");
       return;
     }
     setIsLoading(true);
     setError("");
     try {
-      const res = await fetch("/api/checkout", {
+      const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          items: items.map((i) => ({ name: i.name, unit: i.unit, price: i.price, quantity: i.quantity })),
-          customerName: name,
-          customerEmail: email,
+          name,
+          email,
+          items: items.map((i) => ({ fruit: i.name, unit: i.unit, quantity: i.quantity, price: i.price })),
+          message: `Order total: $${totalDollars}`,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong");
-      window.location.href = data.url;
+      clearCart();
+      setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setIsLoading(false);
     }
   };
+
+  if (submitted) {
+    return (
+      <div className="flex min-h-[70vh] flex-col items-center justify-center bg-[#F8F5F0] px-6 text-center">
+        <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-[#C8510A]">Order Received</p>
+        <h1 className="mb-3 text-2xl font-light text-[#111111]">We&apos;ll be in touch soon</h1>
+        <p className="mb-8 max-w-sm text-sm text-[#6B6560]">
+          Your order request came through. Check your inbox — we sent a confirmation to <span className="font-medium text-[#111111]">{email}</span>. We&apos;ll follow up within 24 hours to arrange pickup or local delivery.
+        </p>
+        <Link href="/products" className="bg-[#111111] px-7 py-3 text-sm font-medium text-white transition-colors hover:bg-[#C8510A]">
+          Back to Shop
+        </Link>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -94,7 +112,7 @@ export default function OrderPage() {
 
         <div className="border border-[#E2D9CE] bg-white p-6">
           <p className="mb-1 text-xs font-medium uppercase tracking-[0.15em] text-[#9C9490]">Your Information</p>
-          <p className="mb-5 text-sm text-[#6B6560]">We&apos;ll email your receipt here after payment.</p>
+          <p className="mb-5 text-sm text-[#6B6560]">We&apos;ll send a confirmation here and follow up to arrange pickup or delivery.</p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.1em] text-[#9C9490]">Full Name</label>
@@ -126,18 +144,15 @@ export default function OrderPage() {
         )}
 
         <button
-          onClick={handleCheckout}
+          onClick={handleSubmit}
           disabled={isLoading}
           className="w-full bg-[#111111] py-4 text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#C8510A] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isLoading ? "Redirecting to Stripe..." : `Pay $${totalDollars} · Secure Checkout`}
+          {isLoading ? "Sending..." : `Request Order · $${totalDollars}`}
         </button>
 
-        <p className="flex items-center justify-center gap-2 text-xs text-[#9C9490]">
-          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
-          </svg>
-          Secure payment via Stripe. We never see your card details.
+        <p className="text-center text-xs text-[#9C9490]">
+          No payment collected yet — we&apos;ll follow up directly to confirm and arrange delivery. Stripe checkout will be enabled once we&apos;re fully licensed.
         </p>
       </div>
     </div>
