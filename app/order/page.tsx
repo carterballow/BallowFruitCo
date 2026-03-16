@@ -3,23 +3,25 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/components/cart-context";
+import { useRouter } from "next/navigation";
 
 export default function OrderPage() {
   const { items, removeItem, updateQty, totalCents, clearCart } = useCart();
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<"email" | "stripe" | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
   const totalDollars = (totalCents / 100).toFixed(2);
 
-  const handleSubmit = async () => {
+  const handleEmailOrder = async () => {
     if (!name.trim() || !email.trim()) {
       setError("Please enter your name and email.");
       return;
     }
-    setIsLoading(true);
+    setIsLoading("email");
     setError("");
     try {
       const res = await fetch("/api/orders", {
@@ -38,7 +40,33 @@ export default function OrderPage() {
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
-      setIsLoading(false);
+      setIsLoading(null);
+    }
+  };
+
+  const handleStripeCheckout = async () => {
+    if (!name.trim() || !email.trim()) {
+      setError("Please enter your name and email.");
+      return;
+    }
+    setIsLoading("stripe");
+    setError("");
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map((i) => ({ name: i.name, unit: i.unit, price: i.price, quantity: i.quantity })),
+          customerName: name,
+          customerEmail: email,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Something went wrong");
+      window.location.href = data.url;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+      setIsLoading(null);
     }
   };
 
@@ -143,17 +171,32 @@ export default function OrderPage() {
           <p className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p>
         )}
 
-        <button
-          onClick={handleSubmit}
-          disabled={isLoading}
-          className="w-full bg-[#111111] py-4 text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#C8510A] disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isLoading ? "Sending..." : `Request Order · $${totalDollars}`}
-        </button>
+        <div className="space-y-3">
+          <button
+            onClick={handleEmailOrder}
+            disabled={isLoading !== null}
+            className="w-full bg-[#111111] py-4 text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#C8510A] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isLoading === "email" ? "Sending..." : `Send Order Request · $${totalDollars}`}
+          </button>
+          <p className="text-center text-xs text-[#6B6560]">
+            No payment collected yet — we&apos;ll follow up directly to confirm and arrange pickup or delivery.
+          </p>
+        </div>
 
-        <p className="text-center text-xs text-[#9C9490]">
-          No payment collected yet — we&apos;ll follow up directly to confirm and arrange delivery. Stripe checkout will be enabled once we&apos;re fully licensed.
-        </p>
+        <div className="border-t border-[#E2D9CE] pt-6 space-y-3">
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-[#9C9490]">Also available — Stripe Checkout ✦</p>
+          <p className="text-xs text-[#9C9490]">
+            Stripe is fully integrated and ready. Use the button above for now — online payments will go live once the business is officially licensed.
+          </p>
+          <button
+            onClick={handleStripeCheckout}
+            disabled={isLoading !== null}
+            className="w-full border border-[#E2D9CE] py-3 text-sm font-medium tracking-wide text-[#6B6560] transition-colors hover:border-[#111111] hover:text-[#111111] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isLoading === "stripe" ? "Redirecting..." : `Pay $${totalDollars} via Stripe`}
+          </button>
+        </div>
       </div>
     </div>
   );
