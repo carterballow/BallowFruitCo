@@ -1,13 +1,13 @@
 # Ballow Fruit Co.
 
-Direct->consumer storefront for a family fruit farm in Encinitas, CA. Built from scratch as a full-stack web project.
+Direct->consumer storefront for my family's fruit company in Encinitas, CA. Built from scratch as a full-stack web project with the assistance of Claude Code.
 
 ## What it does
 
-- Browse and purchase fresh fruit (naval oranges, blood oranges, lemons, limes, pomegranates, avocados)
-- Checkout via Stripe with email receipts through Resend
+- Browse and purchase fruit (naval oranges, blood oranges, lemons, limes, pomegranates, avocados)
+- Checkout via emails fulfilled by Resend, (Stripe is implemented but not functional as we lack permits for Stripe sales)
 - Create an account and log in with Supabase Auth
-- Generate a personalized 7 day meal plan based on what's in your cart, powered by Gemini AI and a vector-embedded recipe database
+- Generate a personalized 7 day meal plan based on what's in your cart, powered by Gemini AI and RAG/vector embeddings.
 
 ## Stack
 
