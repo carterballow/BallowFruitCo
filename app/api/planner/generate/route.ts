@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase";
 import { generateWeeklyPlan, CartItem, UserPrefs } from "@/lib/planner";
 
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
   const supabase = await getSupabaseServer();
   const { data: { user } } = await supabase.auth.getUser();
